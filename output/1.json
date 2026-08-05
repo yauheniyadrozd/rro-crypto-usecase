@@ -1,0 +1,388 @@
+{
+  "meta": {
+    "generated": "2026-05-11T19:55:41.253653+00:00",
+    "n_wallets": 7,
+    "n_transactions": 53644,
+    "date_range": {
+      "start": "2015-08-07",
+      "end": "2026-05-10"
+    },
+    "rule_stats": {
+      "mean": 52.0,
+      "max": 76,
+      "dangerous": 4,
+      "suspicious": 2,
+      "clean": 1
+    },
+    "lstm_stats": {
+      "mean": 62.7,
+      "max": 77,
+      "dangerous": 4,
+      "suspicious": 3,
+      "clean": 0
+    },
+    "agreement_rate": 57.1
+  },
+  "wallets": [
+    {
+      "wallet": "0x2910543af39aba0cd09dbb2d50200b3e800a63d2",
+      "label": "Kraken (hot #1)",
+      "rule": {
+        "score": 76,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0x7900\u2026b8df -> Kraken -> 0x7900\u2026b8df",
+          "Cycle [2 nodes]: 0x6294\u2026cc48 -> Kraken -> 0x6294\u2026cc48",
+          "Cycle [2 nodes]: 0x0b12\u2026639a -> Kraken -> 0x0b12\u2026639a",
+          "... and 68 more cycle(s)",
+          "Fast transit: funds forwarded 2268 time(s) within 1h of receipt (56% of incoming txs)",
+          "Structuring: 5 transfers -> 0x00be\u2026fa77",
+          "Structuring: 14 transfers -> 0x0202\u2026b7e3",
+          "Structuring: 91 transfers -> 0x03e2\u2026e644",
+          "Fan-out: sends to 1843 unique addresses (threshold: 10)",
+          "Fan-in: receives from 1627 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 11,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 77,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.016] Sent 1881.1228 ETH to 0xcf7b9c\u2026ea53 at 2016-01-27 04:38 UTC",
+          "[attn=0.016] Sent 34743.9447 ETH to 0x533b62\u2026bb11 at 2016-01-27 04:45 UTC",
+          "[attn=0.016] Sent 675.9579 ETH to 0xd9c4a7\u2026262e at 2016-01-27 04:38 UTC"
+        ],
+        "breakdown": {
+          "Log value": 7.54,
+          "Hour of day": 0.63,
+          "Outgoing": 1.42,
+          "CP entropy": 1.21,
+          "Cumul. out": 1.56,
+          "TX gap": 0.02,
+          "Night flag": 0.91,
+          "Relative value": 0.0,
+          "Round num": 0.0
+        },
+        "prob": 0.7743
+      },
+      "delta": 1,
+      "agreement": true
+    },
+    {
+      "wallet": "0x3f5ce5fbfe3e9af3971dd833d26ba9b5c936f0be",
+      "label": "Binance (main)",
+      "rule": {
+        "score": 75,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: Binance -> 0x0c19\u20263894 -> Binance",
+          "Cycle [2 nodes]: Binance -> 0x0018\u20265478 -> Binance",
+          "Fast transit: funds forwarded 709 time(s) within 1h of receipt (100% of incoming txs)",
+          "Structuring: 25 transfers -> 0x002b\u2026459d",
+          "Structuring: 8 transfers -> 0x03d2\u20268ea0",
+          "Structuring: 19 transfers -> 0x047d\u20260a7a",
+          "Fan-out: sends to 2657 unique addresses (threshold: 10)",
+          "Fan-in: receives from 605 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 20,
+          "Fast transit": 20,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 75,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.017] Sent 100.9950 ETH to 0x2320cc\u2026d0ee at 2017-08-16 10:18 UTC",
+          "[attn=0.017] Sent 27.4900 ETH to 0x3c7bc8\u202695ac at 2017-08-16 10:18 UTC",
+          "[attn=0.017] Sent 27.3456 ETH to 0x655d2e\u20264e10 at 2017-08-16 10:18 UTC"
+        ],
+        "breakdown": {
+          "Log value": 3.25,
+          "Hour of day": 0.68,
+          "Outgoing": 1.56,
+          "CP entropy": 1.27,
+          "Cumul. out": 1.56,
+          "TX gap": 0.02,
+          "Night flag": 0.0,
+          "Relative value": 0.02,
+          "Round num": 0.02
+        },
+        "prob": 0.7548
+      },
+      "delta": 0,
+      "agreement": true
+    },
+    {
+      "wallet": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "label": "Vitalik Buterin (vitalik.eth)",
+      "rule": {
+        "score": 65,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "... and 1 more cycle(s)",
+          "Fast transit: funds forwarded 88 time(s) within 1h of receipt (1% of incoming txs)",
+          "Structuring: 354 transfers -> \u2026",
+          "Structuring: 7 transfers -> 0x0e71\u202693b5",
+          "Structuring: 6 transfers -> 0x1219\u202691fb",
+          "Fan-out: sends to 100 unique addresses (threshold: 10)",
+          "Fan-in: receives from 23 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 0,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 60,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.016] Received 0.0007 ETH from 0x839d37\u2026d486 at 2024-10-12 17:05 UTC",
+          "[attn=0.016] Received 0.0007 ETH from 0xb31401\u20267c38 at 2024-10-12 17:05 UTC",
+          "[attn=0.016] Received 0.0007 ETH from 0xd94e64\u2026071c at 2024-10-12 17:05 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.11,
+          "Outgoing": 0.09,
+          "CP entropy": 1.29,
+          "Cumul. out": 1.56,
+          "TX gap": 0.07,
+          "Night flag": 0.02,
+          "Relative value": 0.0,
+          "Round num": 1.54
+        },
+        "prob": 0.6003
+      },
+      "delta": -5,
+      "agreement": true
+    },
+    {
+      "wallet": "0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+      "label": "Vitalik Buterin (VB public)",
+      "rule": {
+        "score": 67,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [2 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "... and 3 more cycle(s)",
+          "Fast transit: funds forwarded 33 time(s) within 1h of receipt (2% of incoming txs)",
+          "Structuring: 5 transfers -> 0x0000\u20262734",
+          "Structuring: 20 transfers -> 0x1db3\u20266ee6",
+          "Structuring: 7 transfers -> 0x6131\u202637b5",
+          "Fan-out: sends to 28 unique addresses (threshold: 10)",
+          "Fan-in: receives from 44 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 0,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 2
+        }
+      },
+      "lstm": {
+        "score": 58,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0x675a38\u20266dd6 at 2026-05-05 03:21 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x675a38\u20266dd6 at 2026-05-05 03:21 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x675a38\u20266dd6 at 2026-05-05 03:21 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 0.67,
+          "Outgoing": 0.0,
+          "CP entropy": 0.04,
+          "Cumul. out": 1.56,
+          "TX gap": 0.08,
+          "Night flag": 0.48,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.5831
+      },
+      "delta": -9,
+      "agreement": true
+    },
+    {
+      "wallet": "0xd551234ae421e3bcba99a0da6d736074f22192ff",
+      "label": "Binance (hot #2)",
+      "rule": {
+        "score": 48,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "Fast transit: funds forwarded 4 time(s) within 1h of receipt (100% of incoming txs)",
+          "Structuring: 7 transfers -> 0x08f5\u2026ccd8",
+          "Structuring: 30 transfers -> 0x0abd\u202604ea",
+          "Structuring: 37 transfers -> 0x0d87\u202687ef",
+          "Fan-out: sends to 3266 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Binance",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 20,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 3
+        }
+      },
+      "lstm": {
+        "score": 71,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.017] Sent 30.0900 ETH to 0xa615f7\u202650a7 at 2018-01-09 00:27 UTC",
+          "[attn=0.017] Sent 35.0100 ETH to 0x789c3e\u202688aa at 2018-01-09 00:26 UTC",
+          "[attn=0.017] Sent 3.1874 ETH to 0xa180e3\u20264dba at 2018-01-09 00:26 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.71,
+          "Hour of day": 0.01,
+          "Outgoing": 1.56,
+          "CP entropy": 1.25,
+          "Cumul. out": 1.56,
+          "TX gap": 0.02,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 0.84
+        },
+        "prob": 0.7094
+      },
+      "delta": 23,
+      "agreement": false
+    },
+    {
+      "wallet": "0x71660c4005ba85c37ccec55d0c4493e66fe775d3",
+      "label": "Coinbase (hot #1)",
+      "rule": {
+        "score": 30,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "Fast transit: funds forwarded 8 time(s) within 1h of receipt (89% of incoming txs)",
+          "Structuring: 554 transfers -> 0x0abd\u202604ea",
+          "Structuring: 848 transfers -> 0x1111\u2026c302",
+          "Structuring: 8242 transfers -> 0xa0b8\u2026eb48"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 18,
+          "Structuring": 12,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 51,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.016] Sent 0.0000 ETH to 0xa0b869\u2026eb48 at 2021-05-01 18:37 UTC",
+          "[attn=0.016] Sent 0.0000 ETH to 0xa0b869\u2026eb48 at 2021-05-01 18:37 UTC",
+          "[attn=0.016] Sent 0.0000 ETH to 0xa0b869\u2026eb48 at 2021-05-01 18:37 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.22,
+          "Outgoing": 1.56,
+          "CP entropy": 0.13,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.5075
+      },
+      "delta": 21,
+      "agreement": false
+    },
+    {
+      "wallet": "0x220866b1a2219f40e72f5c628b65d54268ca3a9d",
+      "label": "Vitalik Buterin (VB3)",
+      "rule": {
+        "score": 3,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Linked to flagged wallet: Vitalik Buterin",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 3
+        }
+      },
+      "lstm": {
+        "score": 47,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0x4c302c\u20267065 at 2026-02-09 21:56 UTC",
+          "[attn=0.016] Received 0.0000 ETH from 0xe02b58\u20265f51 at 2026-05-09 17:13 UTC",
+          "[attn=0.016] Received 0.0000 ETH from 0x4c302c\u20267065 at 2026-02-09 21:57 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.27,
+          "Outgoing": 0.0,
+          "CP entropy": 0.28,
+          "Cumul. out": 0.0,
+          "TX gap": 0.46,
+          "Night flag": 0.05,
+          "Relative value": 0.0,
+          "Round num": 1.54
+        },
+        "prob": 0.4688
+      },
+      "delta": 44,
+      "agreement": false
+    }
+  ]
+}

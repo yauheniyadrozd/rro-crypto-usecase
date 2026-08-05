@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ETH AML — Rule-Based vs LSTM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg0:#07090f;--bg1:#0c1118;--bg2:#111827;--bg3:#1a2333;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#e2e8f4;--sub:#6b7fa3;
+  --rule:#c084fc;--lstm:#38bdf8;
+  --red:#f87171;--orange:#fb923c;--green:#4ade80;
+  --red-bg:rgba(248,113,113,.1);--orange-bg:rgba(251,146,60,.1);--green-bg:rgba(74,222,128,.1);
+  --mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--r:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg0);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:var(--bg1);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.logo{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--rule);letter-spacing:.15em}
+.logo em{color:var(--lstm);font-style:normal}
+.topbar h1{font-size:15px;font-weight:600;flex:1}
+.btn{padding:7px 16px;border-radius:6px;font-size:12px;font-family:var(--mono);cursor:pointer;border:1px solid var(--border2);background:var(--bg2);color:var(--text);transition:background .15s;white-space:nowrap}
+.btn:hover{background:var(--bg3)}
+.btn-p{background:rgba(192,132,252,.15);border-color:var(--rule);color:var(--rule)}
+.btn-p:hover{background:rgba(192,132,252,.25)}
+
+/* LOAD SCREEN */
+#load-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 57px);gap:20px;padding:32px}
+.load-card{background:var(--bg1);border:1px solid var(--border2);border-radius:16px;padding:40px 48px;max-width:560px;width:100%;text-align:center}
+.load-card h2{font-size:22px;font-weight:600;margin-bottom:10px}
+.load-card p{color:var(--sub);font-size:13px;line-height:1.7;margin-bottom:24px}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:2px 7px;border-radius:4px}
+label.btn-up{display:inline-block;padding:11px 32px;background:rgba(192,132,252,.15);border:1px solid var(--rule);color:var(--rule);border-radius:8px;cursor:pointer;font-family:var(--mono);font-size:13px;transition:background .15s}
+label.btn-up:hover{background:rgba(192,132,252,.25)}
+.btn-demo{padding:9px 28px;background:transparent;border:1px solid var(--border2);color:var(--sub);border-radius:8px;cursor:pointer;font-family:var(--mono);font-size:12px;transition:color .15s,border-color .15s;margin-top:10px;display:block;width:fit-content;margin-left:auto;margin-right:auto}
+.btn-demo:hover{color:var(--text);border-color:var(--border2)}
+.how{background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:22px 26px;max-width:560px;width:100%}
+.how h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--sub);margin-bottom:14px}
+.step{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start}
+.sn{width:22px;height:22px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--sub)}
+.step p{font-size:12px;color:var(--sub);line-height:1.6}
+.step p strong{color:var(--text)}
+
+/* APP */
+#app{display:none;padding:24px 28px;max-width:1320px;margin:0 auto}
+#app.vis{display:block}
+
+/* EXPLAINER */
+.explainer{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.exp{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px}
+.exp h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.exp-r h3{color:var(--rule)}.exp-l h3{color:var(--lstm)}
+.exp p{font-size:12px;color:var(--sub);line-height:1.65}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tag{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);color:var(--sub)}
+
+/* STATS */
+.stats{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.sc{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;flex:1;min-width:110px}
+.sc-l{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.sc-v{font-family:var(--mono);font-size:22px;font-weight:600}
+.sc-s{font-size:11px;color:var(--sub);margin-top:3px}
+
+/* RISK LEGEND */
+.rl{display:flex;align-items:center;gap:18px;margin-bottom:18px;font-size:12px;flex-wrap:wrap}
+.rli{display:flex;align-items:center;gap:7px}
+.rld{width:10px;height:10px;border-radius:50%}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.fb{padding:5px 14px;border-radius:20px;font-size:12px;font-family:var(--mono);cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--sub);transition:all .15s}
+.fb:hover,.fb.act{background:var(--bg3);border-color:var(--border2);color:var(--text)}
+
+/* SECTION HEAD */
+.sh{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--sub);padding:6px 0;margin-bottom:12px;border-bottom:1px solid var(--border)}
+
+/* ETHERSCAN LINK */
+.ethlink{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--sub);text-decoration:none;padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);transition:all .15s;cursor:pointer;white-space:nowrap}
+.ethlink:hover{border-color:rgba(56,189,248,.4);color:var(--lstm);background:rgba(56,189,248,.07)}
+.ethlink svg{width:10px;height:10px;flex-shrink:0;opacity:.6}
+.ethlink:hover svg{opacity:1}
+.copy-btn{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--sub);padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);transition:all .15s;cursor:pointer;white-space:nowrap;user-select:none}
+.copy-btn:hover{border-color:rgba(192,132,252,.4);color:var(--rule);background:rgba(192,132,252,.07)}
+.copy-btn.copied{border-color:rgba(74,222,128,.4);color:var(--green);background:rgba(74,222,128,.07)}
+.addr-row{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+
+/* WALLET CARD */
+.wcard{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.wcard:hover{border-color:var(--border2)}
+.wct{display:grid;grid-template-columns:200px 1fr 1fr 88px;align-items:center;gap:14px;padding:14px 18px;cursor:pointer}
+.wn{font-weight:600;font-size:13px;margin-bottom:2px}
+.wa{font-family:var(--mono);font-size:10px;color:var(--sub)}
+.wcat{font-size:10px;margin-top:4px;display:inline-block;padding:1px 7px;border-radius:3px;border:1px solid var(--border);color:var(--sub);font-family:var(--mono)}
+
+.scol{display:flex;flex-direction:column;gap:4px}
+.slbl{font-size:10px;font-family:var(--mono);margin-bottom:2px}
+.slbl.r{color:var(--rule)}.slbl.l{color:var(--lstm)}
+.sbw{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.sb{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.sbot{display:flex;align-items:center;gap:7px;margin-top:3px}
+.snum{font-family:var(--mono);font-size:18px;font-weight:600}
+.chip{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:600}
+.cD{background:var(--red-bg);color:var(--red)}
+.cS{background:var(--orange-bg);color:var(--orange)}
+.cC{background:var(--green-bg);color:var(--green)}
+
+.dcol{text-align:center}
+.dv{font-family:var(--mono);font-size:22px;font-weight:700}
+.dl{font-size:10px;color:var(--sub);margin-top:2px}
+.ag{color:var(--green)}.cl{color:var(--orange)}.di{color:var(--red)}
+
+.eh{font-size:10px;color:var(--sub);padding:0 18px 8px;cursor:pointer;text-align:right}
+
+/* DETAIL */
+.wd{display:none;border-top:1px solid var(--border);padding:18px;grid-template-columns:1fr 1fr;gap:20px}
+.wd.op{display:grid}
+.dc h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.dc.r h4{color:var(--rule)}.dc.l h4{color:var(--lstm)}
+.ri{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg2);border-left:2px solid var(--border2);padding:7px 10px;border-radius:0 5px 5px 0;margin-bottom:5px;line-height:1.55}
+.ri.hi{border-left-color:var(--red);color:var(--text)}
+.ri.mi{border-left-color:var(--orange)}
+.fbr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.fbn{font-size:11px;color:var(--sub);width:145px;flex-shrink:0}
+.fbw{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.fbb{height:100%;border-radius:3px}
+.fbv{font-family:var(--mono);font-size:10px;color:var(--sub);width:44px;text-align:right}
+.exp-block{margin-top:12px;border-top:0.5px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:7px}
+.exp-row{display:flex;align-items:flex-start;gap:10px}
+.exp-lbl{color:var(--sub);min-width:108px;flex-shrink:0;font-size:11px;padding-top:2px}
+.exp-note{color:var(--sub);font-size:11px;line-height:1.55}
+.token-block{margin-top:14px;border-top:0.5px solid var(--border);padding-top:12px}
+.token-block h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);margin-bottom:8px}
+.token-grid{display:flex;flex-wrap:wrap;gap:6px}
+.token-chip{display:inline-flex;flex-direction:column;gap:2px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:6px;padding:6px 10px;min-width:90px}
+.token-sym{font-family:var(--mono);font-weight:600;font-size:12px;color:var(--text)}
+.token-name{color:var(--sub);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.token-stats{display:flex;gap:8px;margin-top:3px}
+.token-in{font-family:var(--mono);font-size:10px;color:var(--green)}
+.token-out{font-family:var(--mono);font-size:10px;color:var(--orange)}
+.token-links{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+.vm{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-family:var(--mono);font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap;margin-right:6px}
+.vm-ok{background:var(--green-bg);color:var(--green)}
+.vm-warn{background:var(--orange-bg);color:var(--orange)}
+.vm-fail{background:var(--red-bg);color:var(--red)}
+
+/* INVESTMENT SIGNALS */
+.inv-wrap{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:22px}
+.inv-disclaimer{font-size:11px;color:var(--sub);background:var(--bg2);border-left:3px solid var(--orange);padding:8px 12px;border-radius:0 6px 6px 0;margin-bottom:18px;line-height:1.6}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.inv-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color .2s}
+.inv-card:hover{border-color:var(--border2)}
+.inv-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.inv-sym{font-family:var(--mono);font-size:18px;font-weight:700}
+.inv-name{font-size:11px;color:var(--sub)}
+.inv-signal{font-size:10px;font-family:var(--mono);font-weight:600;padding:2px 8px;border-radius:10px;margin-left:auto}
+.sig-buy{background:rgba(74,222,128,.15);color:var(--green)}
+.sig-watch{background:rgba(251,146,60,.12);color:var(--orange)}
+.sig-avoid{background:rgba(248,113,113,.12);color:var(--red)}
+.inv-score-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.inv-score-bar{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.inv-score-fill{height:100%;border-radius:3px}
+.inv-score-num{font-family:var(--mono);font-size:13px;font-weight:600;width:36px;text-align:right}
+.inv-facts{display:flex;flex-direction:column;gap:4px}
+.inv-fact{font-size:11px;color:var(--sub)}
+.inv-fact strong{color:var(--text)}
+.inv-reason{font-size:11px;color:var(--sub);margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);line-height:1.5}
+.inv-addr{margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border)}
+
+/* SCATTER */
+.swrap{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:22px;padding:20px}
+.stitle{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);margin-bottom:14px}
+.ssub{font-size:11px;color:var(--sub);margin-top:10px;text-align:center}
+canvas#scatter{display:block;width:100%;cursor:crosshair}
+
+/* TABLE */
+.tw{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:22px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--sub);font-weight:500;background:var(--bg2);border-bottom:1px solid var(--border)}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+
+/* GUIDE */
+.guide{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:22px}
+.guide h3{font-size:13px;font-weight:600;margin-bottom:14px}
+.gg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gi{background:var(--bg2);border-radius:8px;padding:14px}
+.gi h4{font-size:12px;font-weight:600;margin-bottom:6px}
+.gi p{font-size:11px;color:var(--sub);line-height:1.6}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:12px;color:var(--green);z-index:9999;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:820px){
+  .wct{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}
+  .explainer,.gg{grid-template-columns:1fr}
+  .wd.op{grid-template-columns:1fr}
+  .topbar h1{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">AML/<em>ML</em></div>
+  <h1>Ethereum Wallet Risk — Rule-Based vs LSTM</h1>
+  <label class="btn btn-p" for="file-top">Upload JSON</label>
+  <input type="file" id="file-top" accept=".json" style="display:none">
+  <button class="btn" onclick="loadDemo()">Load demo (25 wallets)</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Skopiowano!</div>
+
+<div id="load-screen">
+  <div class="load-card">
+    <h2>Compare two AML approaches</h2>
+    <p>
+      See how <strong>rule-based heuristics</strong> and a
+      <strong>Bidirectional LSTM</strong> score the same Ethereum wallets —
+      with score breakdowns, reasons, divergence analysis, and scatter plot.
+      Click <strong>Load demo</strong> to explore 25 real-world wallet types instantly.
+    </p>
+    <label class="btn-up" for="file-main">Upload eth_aml_comparison.json</label>
+    <input type="file" id="file-main" accept=".json" style="display:none">
+    <button class="btn-demo" onclick="loadDemo()">Load demo with 25 wallets →</button>
+  </div>
+  <div class="how">
+    <h3>How to generate real data</h3>
+    <div class="step"><div class="sn">1</div><p>Add Etherscan key to <code>eth_aml_detector.py</code> and <code>eth_aml_lstm.py</code></p></div>
+    <div class="step"><div class="sn">2</div><p><code>pip install torch numpy pandas networkx requests matplotlib scikit-learn</code></p></div>
+    <div class="step"><div class="sn">3</div><p>Run <code>python eth_aml_compare.py</code> — fetches data once, trains LSTM, writes <code>eth_aml_comparison.json</code></p></div>
+    <div class="step"><div class="sn">4</div><p>Upload that JSON file here or to the topbar button</p></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="explainer">
+    <div class="exp exp-r">
+      <h3>Rule-Based Heuristics</h3>
+      <p>Scores wallets using 7 hand-crafted rules based on known money-laundering typologies. Fast, fully deterministic, easy to audit — but can only catch patterns that were explicitly programmed in. Blind to novel sequences.</p>
+      <div class="tags"><span class="tag">Cycle detection</span><span class="tag">Fast transit</span><span class="tag">Structuring</span><span class="tag">Fan-out / Fan-in</span><span class="tag">Night activity</span><span class="tag">Tainted links</span></div>
+    </div>
+    <div class="exp exp-l">
+      <h3>Bidirectional LSTM</h3>
+      <p>Reads each wallet's full transaction history as a time series. Learns temporal patterns — value rhythms, timing gaps, counterparty diversity over time. Trained on pseudo-labels from the rule scorer, then generalises beyond them. Attention weights show exactly which transactions drove the score.</p>
+      <div class="tags"><span class="tag">Log value</span><span class="tag">Hour of day</span><span class="tag">TX direction</span><span class="tag">CP entropy</span><span class="tag">Time gaps</span><span class="tag">Cumulative flow</span><span class="tag">Round numbers</span><span class="tag">Night flag</span></div>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="rl">
+    <strong style="font-size:12px;color:var(--sub)">Risk levels:</strong>
+    <div class="rli"><div class="rld" style="background:var(--red)"></div><span>DANGEROUS (60–100) — immediate investigation</span></div>
+    <div class="rli"><div class="rld" style="background:var(--orange)"></div><span>SUSPICIOUS (30–59) — enhanced monitoring</span></div>
+    <div class="rli"><div class="rld" style="background:var(--green)"></div><span>CLEAN (0–29) — no significant anomalies</span></div>
+    <span style="border-left:1px solid var(--border);height:16px;margin:0 4px"></span>
+    <div class="rli"><div class="rld" style="background:var(--rule)"></div><span style="color:var(--rule)">Rule-based score</span></div>
+    <div class="rli"><div class="rld" style="background:var(--lstm)"></div><span style="color:var(--lstm)">LSTM score</span></div>
+  </div>
+
+  <div class="swrap">
+    <div class="stitle">Score correlation — does LSTM agree with the rules?</div>
+    <canvas id="scatter" height="300"></canvas>
+    <div class="ssub">Points on the diagonal = both methods agree &nbsp;·&nbsp; Points off the diagonal = divergence &nbsp;·&nbsp; Left half of dot = rule color, right half = LSTM color</div>
+  </div>
+
+  <div class="guide">
+    <h3>How to read disagreements</h3>
+    <div class="gg">
+      <div class="gi"><h4 style="color:var(--lstm)">LSTM scores higher</h4><p>The model found a suspicious <em>temporal pattern</em> (timing rhythm, value cycle, automated behaviour) that the fixed rules don't cover. Worth a manual review even if rules say clean.</p></div>
+      <div class="gi"><h4 style="color:var(--rule)">Rules score higher</h4><p>A specific rule fired (e.g. fan-out &gt;10, night activity &gt;40%) but the LSTM saw no unusual temporal structure overall. Could be a rule false-positive — or a LSTM blind spot.</p></div>
+      <div class="gi"><h4 style="color:var(--green)">Both agree: CLEAN</h4><p>Strong signal of low risk. Neither explicit heuristics nor learned temporal patterns raised flags. High confidence the wallet is not engaged in layering.</p></div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="fb act" onclick="setFilter(this,'all')">All wallets</button>
+    <button class="fb" onclick="setFilter(this,'dangerous')">🔴 Dangerous</button>
+    <button class="fb" onclick="setFilter(this,'suspicious')">🟠 Suspicious</button>
+    <button class="fb" onclick="setFilter(this,'clean')">🟢 Clean</button>
+    <button class="fb" onclick="setFilter(this,'diverge')">⚡ Diverging</button>
+    <button class="fb" onclick="setFilter(this,'wrong')">❌ Wrong verdict</button>
+  </div>
+
+  <div class="sh">Wallet risk cards — click to expand findings & feature breakdown</div>
+  <div id="wlist"></div>
+
+  <div class="sh" style="margin-top:24px">Summary table</div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>Wallet</th>
+          <th style="color:var(--rule)">Rule score</th>
+          <th style="color:var(--lstm)">LSTM score</th>
+          <th>Δ</th>
+          <th style="color:var(--rule)">Rule verdict</th>
+          <th style="color:var(--lstm)">LSTM verdict</th>
+          <th>Expected</th>
+          <th>Rule ok?</th>
+          <th>LSTM ok?</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="sh" style="margin-top:32px">🪙 Token investment signals — derived from on-chain AML data</div>
+  <div id="invest-section"></div>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const rc = s => s>=60?'var(--red)':s>=30?'var(--orange)':'var(--green)';
+const vd = s => s>=60?'DANGEROUS':s>=30?'SUSPICIOUS':'CLEAN';
+const vc = v => ({DANGEROUS:'D',SUSPICIOUS:'S',CLEAN:'C'}[v]||'C');
+
+// ── Etherscan helpers ──────────────────────────────────────
+// Map of known full addresses for the demo wallets (keyed by short display address)
+const KNOWN_ADDRESSES = {
+  '0xd8dA6BF...96045': '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+  '0xAb5801...9B':     '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B',
+  '0x220866...9d':     '0x2208660698d3aCFf01bCe5a5756F2f2826Abb9d',
+  '0x3f5CE5...0bE':    '0x3f5CE5FEf640E70D8cE67CB1a73aDbEFa8aBe17c',  // Binance hot 1 (approx)
+  '0xD55123...A99A':   '0xD551234Ae421e3BCBA99A0Da6d736074f22192A9',
+  '0x564286...AceD':   '0x564286362092D8e7936f0549571a803B203aAceD',
+  '0x28C6c0...d60':    '0x28C6c06298d514Db089934071355E5743bf21d60',
+  '0xf97781...acec':   '0xf977814e90da44bFA03b6295A0616a897441acec',
+  '0x71660c...f775d':  '0x71660c4005BA85c37ccec55d0C4493E66Fe775d5',
+  '0xa9D1e0...3E43':   '0xa9D1e08C7793951949e2acd9e28716e7c8F59Ac2', // placeholder
+  '0x77696b...5cA':    '0x77696bb39917C91A0c3908D577d5e322095425cA',
+  '0x291054...3D2':    '0x2910543Af39abA0Cd09dBb2D50200b3E800A3D82',
+  '0xAe2D46...673F':   '0xAe2D4617c862309A3d75A0fFB358C7a5009c673F',
+  '0x6cC5F6...f7b':    '0x6cC5F688a315f3dC28A7781717a9A798a59fdf7b',
+  '0x236F23...4e68':   '0x236F233DbE7cfd4af9d4eb6f06C08e6e3b4E4e68',
+  '0x000000...05Fa':   '0x00000000219ab540356cBB839Cbe05303d7705Fa',
+  '0xC02aaA...6Cc2':   '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  '0x7a250d...488D':   '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  '0xE59242...1564':   '0xE592427A0AEce92De3Edee1F18E0157C05861564',
+  '0xDef1C0...cfF':    '0xDef1C0ded9bec7F1a1670819833240f027b25EfF',
+  '0xD4B88D...Cfa3':   '0xD4B88Df4D29F5CedD6857912842cff3b20C8Cfa3',
+  '0x910Cb...0bF':     '0x910Cbd523D972eb0a6f4cAe4618aD62622b39DbF',
+  '0xbB93e5...0bB':    '0xbB93e5Fef56B5d0e4Ef0A35D4f5F0C5B3259a0bB',
+  '0x858942...A16':    '0x8589427373D6D84E98730D7795D8f6f8731FDA16',
+  '0x1919DB...685':    '0x1919DB36cA2fa2e15F9000FD9CDC2edaA9CE7685',
+};
+
+// ERC-20 token contract addresses (mainnet)
+const TOKEN_ADDRESSES = {
+  'WETH':  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  'WBTC':  '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+  'UNI':   '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+  'LINK':  '0x514910771AF9Ca656af840dff83E8264EcF986CA',
+  'AAVE':  '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+  'CRV':   '0xD533a949740bb3306d119CC777fa900bA034cd52',
+  'MKR':   '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',
+  'SNX':   '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
+  'COMP':  '0xc00e94Cb662C3520282E6f5717214004A7f26888',
+  'YFI':   '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e',
+  'BAL':   '0xba100000625a3754423978a60c9317c58a424e3D',
+  'SUSHI': '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+  'LDO':   '0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32',
+  'RPL':   '0xD33526068D116cE69F19A9ee46F0bd304F21A51f',
+  'CVX':   '0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B',
+  'DYDX':  '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
+  'GMX':   '0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a',
+  'MATIC': '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
+  'ARB':   '0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1',
+  'OP':    '0x4200000000000000000000000000000000000042',
+  'BNB':   '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+  'SHIB':  '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+  'APE':   '0x4d224452801ACEd8B2F0aebE155379bb5D594381',
+  'BLUR':  '0x5283D291DBCF85356A21bA090E6db59121208b44',
+  'GRT':   '0xc944E90C64B2c07662A292be6244BDf05Cda44a7',
+  'ENS':   '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
+  'MANA':  '0x0F5D2fB29fb7d3CFeE444a200298f468908cC942',
+  'SAND':  '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+  'AXS':   '0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b',
+  'FET':   '0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85',
+  '1INCH': '0x111111111117dC0aa78b770fA6A738034120C302',
+  'ZRX':   '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
+  'PENDLE':'0x808507121B80c02388fAd14726482e061B8da827',
+  'ENA':   '0x57e114B691Db790C35207b2e685D4A43181e6061',
+  'RETH':  '0xae78736Cd615f374D3085123A210448E74Fc6393',
+  'STETH': '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+  'WBTC':  '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+  'PEPE':  '0x6982508145454Ce325dDbE47a25d4ec3d2311933',
+};
+
+function resolveAddress(shortAddr) {
+  return KNOWN_ADDRESSES[shortAddr] || null;
+}
+
+function ethscanWalletLink(addr) {
+  const full = resolveAddress(addr) || addr;
+  return `https://etherscan.io/address/${full}`;
+}
+
+function ethscanTokenLink(symbol) {
+  const addr = TOKEN_ADDRESSES[symbol];
+  if (!addr) return `https://etherscan.io/search?f=0&q=${symbol}`;
+  return `https://etherscan.io/token/${addr}`;
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  });
+  const t = $('toast');
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function ethIconSVG() {
+  return `<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L2 8l6 3.5L14 8 8 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M2 8l6 3.5L14 8" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 11.5L2 8l6 5.5 6-5.5-6 3.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+}
+
+function copyIconSVG() {
+  return `<svg viewBox="0 0 16 16" width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="8" height="9" rx="1.2" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1 1 0 0 1 1-1h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+}
+
+function addrRow(shortAddr, extraClass) {
+  const full = resolveAddress(shortAddr) || shortAddr;
+  const display = full.length > 20 ? full.slice(0,10)+'...'+full.slice(-8) : full;
+  return `<div class="addr-row ${extraClass||''}">
+    <a class="ethlink" href="${ethscanWalletLink(shortAddr)}" target="_blank" rel="noopener" title="Otwórz na Etherscan">
+      ${ethIconSVG()} ${display}
+    </a>
+    <button class="copy-btn" onclick="event.stopPropagation();copyAddr(this,'${full}')" title="Kopiuj adres">
+      ${copyIconSVG()} kopiuj
+    </button>
+  </div>`;
+}
+
+function copyAddr(btn, addr) {
+  copyToClipboard(addr);
+  const prev = btn.innerHTML;
+  btn.classList.add('copied');
+  btn.innerHTML = `${copyIconSVG()} skopiowano`;
+  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = prev; }, 1800);
+}
+
+// File handlers
+['file-top','file-main'].forEach(id => {
+  $(id).addEventListener('change', e => {
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = ev => render(JSON.parse(ev.target.result));
+    r.readAsText(f);
+  });
+});
+
+function loadDemo() {
+  const rawWallets = [
+    ['Vitalik (vitalik.eth)', '0xd8dA6BF...96045', 'Public figure', 12, 9,
+      ['No cyclic patterns detected', 'Night activity: 8% (below 40% threshold)'],
+      ['[attn=0.041] Consistent TX rhythm — no temporal anomaly', '[attn=0.029] Counterparty entropy stable over time'],
+      'CLEAN', 'Well-known public address, no links to illicit activity. Donations, grants, public transfers only.'],
+    ['Vitalik (VB2)', '0xAb5801...9B', 'Public figure', 18, 14,
+      ['Fan-out: 8 unique recipients (below 10 threshold)'],
+      ['[attn=0.055] Low variance in value sizes — no automation detected'],
+      'CLEAN', 'Secondary public address, low activity, no suspicious patterns documented.'],
+    ['Vitalik (VB3)', '0x220866...9d', 'Public figure', 21, 25,
+      ['Night activity: 22% of TXs between 02–06 UTC (near threshold)'],
+      ['[attn=0.143] Timing cluster: 6 TXs within 40-min window', '[attn=0.091] Slight round-number bias (0.5/1.0 ETH values)'],
+      'CLEAN', 'Tertiary address. Night activity likely reflects timezone of use, not automation. No illicit links.'],
+    ['Binance (main)', '0x3f5CE5...0bE', 'CEX hot wallet', 65, 58,
+      ['Fan-out: 3,241 unique recipients', 'Fan-in: 2,871 unique senders', 'Structuring: 48 addresses with 5+ transfers'],
+      ['[attn=0.381] Very high outflow volume in short bursts', '[attn=0.247] Periodic 100/200/500 ETH round-number transfers', '[attn=0.159] 03:00–04:00 UTC activity spike'],
+      'SUSPICIOUS', 'Licensed exchange — high volume is expected and legal, but pattern complexity warrants monitoring. Not DANGEROUS despite volume.'],
+    ['Binance (hot #2)', '0xD55123...A99A', 'CEX hot wallet', 61, 55,
+      ['Fan-out: 1,840 recipients', 'Structuring: 22 addresses', 'Fast transit: 67% forwarded <1h'],
+      ['[attn=0.302] Rapid churn pattern in 200-block windows', '[attn=0.198] High counterparty entropy (many unique addresses)'],
+      'SUSPICIOUS', 'CEX hot wallet — fast transit is the normal exchange mechanic, not structuring. Models should not flag as DANGEROUS.'],
+    ['Binance (hot #3)', '0x564286...AceD', 'CEX hot wallet', 59, 62,
+      ['Fan-out: 1,120 recipients', 'Night activity: 41%'],
+      ['[attn=0.412] Stronger night-time clustering than rule threshold detects', '[attn=0.289] Value rhythm suggests automated sweep pattern'],
+      'SUSPICIOUS', 'Night activity reflects 24/7 exchange operations across timezones — not inherently suspicious for a CEX.'],
+    ['Binance (#14)', '0x28C6c0...d60', 'CEX hot wallet', 55, 48,
+      ['Fan-in: 892 unique senders', 'Fast transit: 54%'],
+      ['[attn=0.231] Regular inflow bursts followed by immediate redistribution'],
+      'SUSPICIOUS', 'Normal exchange hot wallet behaviour. Fan-in from retail users, immediate redistribution to cold storage.'],
+    ['Binance (hot #20)', '0xf97781...acec', 'CEX hot wallet', 58, 64,
+      ['Structuring: 31 addresses', 'Fan-out: 2,100 recipients'],
+      ['[attn=0.358] Value-then-split within 2 blocks, repeated 40×', '[attn=0.219] TX sizes cluster at 0.1 / 1.0 / 10.0 ETH'],
+      'SUSPICIOUS', 'Round-number clustering is a Binance internal accounting pattern, not structuring. Expected verdict: SUSPICIOUS not DANGEROUS.'],
+    ['Coinbase (hot #1)', '0x71660c...f775d', 'CEX hot wallet', 47, 43,
+      ['Fan-out: 780 recipients', 'Structuring: 9 addresses'],
+      ['[attn=0.181] Moderate outflow concentration to 3 recurring addresses'],
+      'SUSPICIOUS', 'Licensed US exchange (publicly traded). Volume expected. Should not exceed SUSPICIOUS.'],
+    ['Coinbase (hot #2)', '0xa9D1e0...3E43', 'CEX hot wallet', 44, 40,
+      ['Fan-in: 640 senders', 'Fast transit: 38%'],
+      ['[attn=0.155] Below-threshold temporal anomaly — normal exchange behaviour'],
+      'SUSPICIOUS', 'Secondary hot wallet. Fast transit at 38% is below the threshold that would indicate a mixer.'],
+    ['Coinbase (hot #3)', '0x77696b...5cA', 'CEX hot wallet', 42, 38,
+      ['Fan-out: 590 recipients'],
+      ['[attn=0.133] Normal exchange distribution pattern'],
+      'SUSPICIOUS', 'Tertiary Coinbase hot wallet — low anomaly score expected.'],
+    ['Kraken (hot #1)', '0x291054...3D2', 'CEX hot wallet', 39, 44,
+      ['Fan-out: 420 recipients', 'Night activity: 36%'],
+      ['[attn=0.241] TX bursts correlate with 00:00 UTC (end-of-day settlement)', '[attn=0.177] Large inflow → many small outflows pattern'],
+      'SUSPICIOUS', 'Licensed EU exchange. 00:00 UTC bursts are end-of-day settlement — standard treasury operation.'],
+    ['Kraken (hot #2)', '0xAe2D46...673F', 'CEX hot wallet', 35, 31,
+      ['Fan-out: 310 recipients'],
+      ['[attn=0.098] Low attention across full sequence — no strong anomaly'],
+      'SUSPICIOUS', 'Low-activity Kraken wallet. Both models close to SUSPICIOUS/CLEAN boundary — acceptable.'],
+    ['OKX (hot)', '0x6cC5F6...f7b', 'CEX hot wallet', 52, 56,
+      ['Fan-out: 890 recipients', 'Fast transit: 48%', 'Night activity: 44%'],
+      ['[attn=0.298] Night cluster stronger than rule threshold captures', '[attn=0.211] Large amount split into 5–10 equal parts repeatedly'],
+      'SUSPICIOUS', 'OKX operates globally including Asia — high night activity (UTC) is expected for an Asian exchange.'],
+    ['OKX (cold #2)', '0x236F23...4e68', 'CEX cold wallet', 14, 11,
+      ['No significant anomalies — very low activity'],
+      ['[attn=0.022] Cold storage behaviour — rare, large, one-directional'],
+      'CLEAN', 'Cold storage address. Infrequent large deposits only. Both models should score very low.'],
+    ['ETH 2.0 Beacon', '0x000000...05Fa', 'DeFi protocol', 30, 19,
+      ['Fan-in: 340,000 unique depositors (far above threshold)'],
+      ['[attn=0.044] Deposits are mechanical (exactly 32 ETH each) — not suspicious in context'],
+      'CLEAN', 'Official ETH staking contract. Fan-in is enormous but every deposit is exactly 32 ETH — mechanical, not suspicious. Rules may over-flag.'],
+    ['Wrapped ETH (WETH)', '0xC02aaA...6Cc2', 'DeFi protocol', 28, 33,
+      ['Fan-out: 85,000 wrap/unwrap recipients'],
+      ['[attn=0.189] Some irregular-sized wraps amid otherwise mechanical pattern'],
+      'CLEAN', 'Core DeFi infrastructure. Wrap/unwrap is neutral activity. Both models should stay below SUSPICIOUS.'],
+    ['Uniswap V2 Router', '0x7a250d...488D', 'DeFi protocol', 22, 18,
+      ['Fan-in/out: protocol-level volume, expected'],
+      ['[attn=0.031] Swap patterns fully consistent with AMM mechanics'],
+      'CLEAN', 'Immutable smart contract, open source, no custody. AMM routing is not a layering risk.'],
+    ['Uniswap V3 Router', '0xE59242...1564', 'DeFi protocol', 20, 17,
+      ['No anomalies beyond expected protocol volume'],
+      ['[attn=0.027] Concentrated liquidity range behaviour — normal'],
+      'CLEAN', 'Same as V2 — protocol-level contract. Should be CLEAN across both models.'],
+    ['0x Exchange Proxy', '0xDef1C0...cfF', 'DeFi protocol', 24, 28,
+      ['Fan-out: 42,000 swap recipients'],
+      ['[attn=0.121] Aggregated routing bundles mimic layering pattern — likely false positive'],
+      'CLEAN', 'DEX aggregator. Routing through multiple liquidity sources superficially resembles layering — models may flag, but it is a false positive.'],
+    ['Tornado Cash (100 ETH)', '0xD4B88D...Cfa3', 'Mixer / Sanctioned', 95, 97,
+      ['OFAC sanctioned address', '7 circular patterns detected', 'Fast transit: 94% forwarded <1h', 'Structuring: fixed 100 ETH deposits'],
+      ['[attn=0.891] Perfect 100 ETH deposit rhythm — canonical mixer', '[attn=0.743] Zero counterparty diversity', '[attn=0.621] Night activity: 68% between 02–06 UTC'],
+      'DANGEROUS', 'OFAC sanctioned since Aug 2022. Fixed-denomination mixer. Both models must score 80+. Any lower score is a model failure.'],
+    ['Tornado Cash (10 ETH)', '0x910Cb...0bF', 'Mixer / Sanctioned', 93, 94,
+      ['OFAC sanctioned', 'Fixed 10 ETH deposits', 'Tainted: linked to 100 ETH pool'],
+      ['[attn=0.856] Every deposit exactly 10 ETH', '[attn=0.701] Withdrawal timing randomised but deposits clustered'],
+      'DANGEROUS', 'OFAC sanctioned. Identical denomination mixer. Score below 80 = model failure.'],
+    ['Tornado Cash (1 ETH)', '0xbB93e5...0bB', 'Mixer / Sanctioned', 91, 89,
+      ['OFAC sanctioned', 'Fixed 1 ETH deposits', 'Structuring: 200+ identical transfers'],
+      ['[attn=0.812] Strongest structuring signal in dataset — highly repetitive', '[attn=0.655] Very low TX gap variance (automated)'],
+      'DANGEROUS', 'OFAC sanctioned. Highest structuring signal in dataset. Score below 75 = model failure.'],
+    ['Tornado Cash (0.1 ETH)', '0x858942...A16', 'Mixer / Sanctioned', 87, 83,
+      ['OFAC sanctioned', 'Fixed 0.1 ETH micro-deposits', 'Fan-in: 8,200 unique depositors'],
+      ['[attn=0.778] Micro-deposit automation pattern', '[attn=0.591] High inflow entropy + zero outflow entropy (funds vanish)'],
+      'DANGEROUS', 'OFAC sanctioned. Micro-denomination pool — often used for small-scale obfuscation. Score below 70 = model failure.'],
+    ['NFT Whale #1', '0x1919DB...685', 'NFT Whale', 41, 52,
+      ['Fan-out: 180 recipients (NFT marketplaces)', 'Night activity: 38%'],
+      ['[attn=0.317] Large-value spikes followed by many small splits', '[attn=0.243] Wash-trading signature: buy → sell → buy same asset within 3h'],
+      'SUSPICIOUS', 'Possible wash-trading pattern. LSTM correctly elevates score vs rules. Expected: SUSPICIOUS. CLEAN would be under-detection; DANGEROUS would be over-detection.'],
+  ];
+
+  const verdictOf = s => s>=60?'DANGEROUS':s>=30?'SUSPICIOUS':'CLEAN';
+  const colorOf = s => s>=60?'#f87171':s>=30?'#fb923c':'#4ade80';
+  const ruleKeys = ['Transaction cycle','Fast transit','Structuring','Fan-out','Fan-in','Night activity','Tainted links'];
+  const lstmKeys = ['Log value','Hour of day','Outgoing','CP entropy','Cumul. out','TX gap','Night flag','Rel. value','Round num'];
+
+  const demoTokens = {
+    'Public figure': [
+      {symbol:'USDC',  name:'USD Coin',           in_count:42,  out_count:18,  in_amount:124500,  out_amount:38200},
+      {symbol:'USDT',  name:'Tether USD',          in_count:31,  out_count:12,  in_amount:88000,   out_amount:21000},
+      {symbol:'UNI',   name:'Uniswap',             in_count:8,   out_count:4,   in_amount:1240,    out_amount:430},
+      {symbol:'ENS',   name:'Ethereum Name Service',in_count:5,  out_count:1,   in_amount:320,     out_amount:0},
+      {symbol:'WBTC',  name:'Wrapped Bitcoin',     in_count:3,   out_count:2,   in_amount:0.45,    out_amount:0.21},
+    ],
+    'CEX hot wallet': [
+      {symbol:'USDT',  name:'Tether USD',          in_count:184210,out_count:176430,in_amount:8.4e9, out_amount:8.3e9},
+      {symbol:'USDC',  name:'USD Coin',            in_count:92100, out_count:88200, in_amount:3.1e9, out_amount:3.0e9},
+      {symbol:'BNB',   name:'BNB',                 in_count:41000, out_count:39800, in_amount:2.8e6, out_amount:2.7e6},
+      {symbol:'SHIB',  name:'Shiba Inu',           in_count:12400, out_count:11900, in_amount:4.2e12,out_amount:4.1e12},
+      {symbol:'LINK',  name:'Chainlink',           in_count:8800,  out_count:8400,  in_amount:512000,out_amount:498000},
+      {symbol:'MATIC', name:'Polygon',             in_count:7200,  out_count:6900,  in_amount:3.2e6, out_amount:3.1e6},
+      {symbol:'WBTC',  name:'Wrapped Bitcoin',     in_count:6100,  out_count:5800,  in_amount:8400,  out_amount:8100},
+    ],
+    'CEX cold wallet': [
+      {symbol:'USDT',  name:'Tether USD',          in_count:12, out_count:3, in_amount:4.2e8, out_amount:8.1e7},
+      {symbol:'USDC',  name:'USD Coin',            in_count:8,  out_count:2, in_amount:1.8e8, out_amount:3.2e7},
+    ],
+    'DeFi protocol': [
+      {symbol:'USDC',  name:'USD Coin',            in_count:4812000,out_count:4809000,in_amount:9.2e11,out_amount:9.2e11},
+      {symbol:'USDT',  name:'Tether USD',          in_count:3210000,out_count:3208000,in_amount:6.1e11,out_amount:6.1e11},
+      {symbol:'DAI',   name:'Dai Stablecoin',      in_count:1840000,out_count:1838000,in_amount:2.8e11,out_amount:2.8e11},
+      {symbol:'WBTC',  name:'Wrapped Bitcoin',     in_count:820000, out_count:818000, in_amount:4.2e7, out_amount:4.2e7},
+      {symbol:'UNI',   name:'Uniswap',             in_count:412000, out_count:410000, in_amount:8.1e8, out_amount:8.0e8},
+    ],
+    'Mixer / Sanctioned': [
+      {symbol:'USDC',  name:'USD Coin',            in_count:2100,out_count:0, in_amount:4.2e7, out_amount:0},
+      {symbol:'DAI',   name:'Dai Stablecoin',      in_count:840, out_count:0, in_amount:1.6e7, out_amount:0},
+    ],
+    'NFT Whale': [
+      {symbol:'USDC',  name:'USD Coin',            in_count:284, out_count:312, in_amount:2840000, out_amount:3120000},
+      {symbol:'WETH',  name:'Wrapped Ether',       in_count:198, out_count:221, in_amount:4820,    out_amount:5410},
+      {symbol:'APE',   name:'ApeCoin',             in_count:42,  out_count:38,  in_amount:128000,  out_amount:114000},
+      {symbol:'BLUR',  name:'Blur',                in_count:28,  out_count:14,  in_amount:84000,   out_amount:42000},
+    ],
+  };
+
+  const wallets = rawWallets.map((row) => {
+    const label = row[0], addr = row[1], cat = row[2], rs = row[3], ls = row[4];
+    const rr = row[5], lr = row[6], expected = row[7], expectedNote = row[8];
+    const delta = ls - rs;
+    const ruleBreak = {}; const weights = [30,20,15,10,10,10,5];
+    ruleKeys.forEach((k,i) => { ruleBreak[k] = Math.min(Math.round(rs * weights[i]/100), weights[i]); });
+    const lstmBreak = {};
+    lstmKeys.forEach((k,i) => { lstmBreak[k] = +(ls/100 * (0.04 + (i*0.02 % 0.15))).toFixed(3); });
+    const ruleVerdict = verdictOf(rs), lstmVerdict = verdictOf(ls);
+    return {
+      wallet: addr, label, category: cat, delta,
+      agreement: Math.abs(delta) <= 15,
+      expected, expectedNote,
+      ruleOk: ruleVerdict === expected,
+      lstmOk: lstmVerdict === expected,
+      tokens: demoTokens[cat] || [],
+      rule: { score:rs, verdict:ruleVerdict, color:colorOf(rs), reasons:rr, breakdown:ruleBreak },
+      lstm: { score:ls, verdict:lstmVerdict, color:colorOf(ls), reasons:lr, breakdown:lstmBreak, prob:+(ls/100).toFixed(3) },
+    };
+  });
+  wallets.sort((a,b) => (b.rule.score+b.lstm.score)-(a.rule.score+a.lstm.score));
+
+  const rs = wallets.map(w=>w.rule.score), ls = wallets.map(w=>w.lstm.score);
+  const avg = a => +(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1);
+  render({
+    meta:{
+      generated: new Date().toISOString(),
+      n_wallets: wallets.length,
+      n_transactions: 2847391,
+      date_range:{start:'2020-11-01',end:'2024-12-31'},
+      rule_stats:{mean:avg(rs),max:Math.max(...rs),dangerous:rs.filter(s=>s>=60).length,suspicious:rs.filter(s=>s>=30&&s<60).length,clean:rs.filter(s=>s<30).length},
+      lstm_stats:{mean:avg(ls),max:Math.max(...ls),dangerous:ls.filter(s=>s>=60).length,suspicious:ls.filter(s=>s>=30&&s<60).length,clean:ls.filter(s=>s<30).length},
+      agreement_rate: +(wallets.filter(w=>w.agreement).length/wallets.length*100).toFixed(1),
+    },
+    wallets,
+  });
+}
+
+let _data = null, _filter = 'all';
+
+function render(data) {
+  data.wallets = (data.wallets || []).map(w => ({
+    ...w,
+    tokens: w.tokens || [],
+    ruleOk: w.ruleOk != null ? w.ruleOk : (w.expected ? w.rule?.verdict === w.expected : null),
+    lstmOk: w.lstmOk != null ? w.lstmOk : (w.expected ? w.lstm?.verdict === w.expected : null),
+  }));
+  _data = data;
+  $('load-screen').style.display = 'none';
+  $('app').classList.add('vis');
+  renderStats(data.meta);
+  renderWallets(data.wallets);
+  renderTable(data.wallets);
+  renderScatter(data.wallets);
+  renderInvestment(data.wallets);
+}
+
+// ── Investment signal engine ──────────────────────────────
+function renderInvestment(wallets) {
+  const LEGIT_TOKENS = new Set([
+    'WETH','WBTC','ETH',
+    'UNI','LINK','AAVE','CRV','MKR','SNX','COMP','YFI','BAL','SUSHI',
+    'LDO','RPL','FXS','CVX','FLX','DYDX','GMX','GNO','RETH','STETH',
+    'MATIC','ARB','OP','IMX','STRK','ZK',
+    'BNB','OKB','CRO','KCS','HT',
+    'SHIB','PEPE','FLOKI','BONE','LEASH',
+    'APE','BLUR','X2Y2','LOOKS','RARE',
+    'GRT','API3','BAND','TRB',
+    'ENS','POAP',
+    'CHZ','MANA','SAND','AXS','GALA',
+    'FET','OCEAN','AGIX','NMR',
+    'AERO','BASE',
+    '1INCH','COW','ZRX',
+    'REN','KNC','UMAMI',
+    'ANKR','SSV',
+    'PENDLE','EIGEN','ENA',
+  ]);
+
+  const MIN_TX = 10;
+  const tokenMap = {};
+
+  wallets.forEach(w => {
+    if (!w.tokens || !w.tokens.length) return;
+    const verdict = w.rule?.verdict || 'CLEAN';
+    w.tokens.forEach(t => {
+      const sym = t.symbol;
+      if (!sym || sym === '?' || sym.length > 10) return;
+      if (['USDT','USDC','DAI','BUSD','TUSD','FRAX','USDP','LUSD','USDE','PYUSD'].includes(sym)) return;
+      if (!LEGIT_TOKENS.has(sym)) return;
+      const totalTx = (t.in_count||0) + (t.out_count||0);
+      if (totalTx < MIN_TX) return;
+      if (!tokenMap[sym]) {
+        tokenMap[sym] = {
+          symbol: sym, name: t.name || sym,
+          cleanVolume: 0, suspiciousVolume: 0, dangerousVolume: 0,
+          cleanWallets: 0, suspiciousWallets: 0, dangerousWallets: 0,
+          totalIn: 0, totalOut: 0, totalTx: 0,
+        };
+      }
+      const e = tokenMap[sym];
+      const vol = (t.in_amount||0) + (t.out_amount||0);
+      e.totalIn  += t.in_amount  || 0;
+      e.totalOut += t.out_amount || 0;
+      e.totalTx  += (t.in_count||0) + (t.out_count||0);
+      if (verdict === 'CLEAN') { e.cleanVolume += vol; e.cleanWallets++; }
+      else if (verdict === 'SUSPICIOUS') { e.suspiciousVolume += vol; e.suspiciousWallets++; }
+      else { e.dangerousVolume += vol; e.dangerousWallets++; }
+    });
+  });
+
+  const scored = Object.values(tokenMap).map(t => {
+    const totalWallets = t.cleanWallets + t.suspiciousWallets + t.dangerousWallets || 1;
+    const cleanRatio     = t.cleanWallets / totalWallets;
+    const dangerousRatio = t.dangerousWallets / totalWallets;
+    let score = Math.round(cleanRatio * 70 - dangerousRatio * 60 + 30);
+    score = Math.max(0, Math.min(100, score));
+    let signal, sigClass, reason;
+    if (dangerousRatio > 0.4) {
+      signal = 'AVOID'; sigClass = 'sig-avoid';
+      reason = `Appears in ${t.dangerousWallets} DANGEROUS wallet(s) out of ${totalWallets} total. High illicit-use association.`;
+    } else if (score >= 65 && t.cleanWallets >= 1) {
+      signal = 'BUY'; sigClass = 'sig-buy';
+      reason = `Found in ${t.cleanWallets} CLEAN wallet(s) (${Math.round(cleanRatio*100)}% of wallets holding this token). Low AML risk.`;
+    } else {
+      signal = 'WATCH'; sigClass = 'sig-watch';
+      reason = `Mixed signals — present in both CLEAN and SUSPICIOUS wallets. Monitor before committing.`;
+    }
+    return { ...t, score, signal, sigClass, reason, cleanRatio, dangerousRatio, totalWallets };
+  });
+
+  const order = { BUY:0, WATCH:1, AVOID:2 };
+  scored.sort((a,b) => order[a.signal]-order[b.signal] || b.score-a.score);
+
+  if (!scored.length) {
+    $('invest-section').innerHTML = '<p style="color:var(--sub);font-size:13px;padding:12px 0">No token data available.</p>';
+    return;
+  }
+
+  const fmtTx = n => n > 1e6 ? (n/1e6).toFixed(1)+'M' : n > 1e3 ? (n/1e3).toFixed(1)+'K' : String(Math.round(n));
+
+  const cards = scored.map(t => {
+    const barColor = t.signal==='BUY'?'var(--green)':t.signal==='AVOID'?'var(--red)':'var(--orange)';
+    const dangerLine = t.dangerousWallets ? `<div class="inv-fact" style="color:var(--red)">Dangerous wallets: <strong>${t.dangerousWallets}</strong></div>` : '';
+    const suspLine   = t.suspiciousWallets ? `<div class="inv-fact">Suspicious wallets: <strong>${t.suspiciousWallets}</strong></div>` : '';
+    const tokenAddr  = TOKEN_ADDRESSES[t.symbol];
+    const ethUrl     = tokenAddr ? `https://etherscan.io/token/${tokenAddr}` : `https://etherscan.io/search?f=0&q=${t.symbol}`;
+    const addrDisplay = tokenAddr ? tokenAddr.slice(0,10)+'...'+tokenAddr.slice(-6) : '— nieznany —';
+    const copyBtn = tokenAddr
+      ? `<button class="copy-btn" onclick="copyToClipboard('${tokenAddr}');this.textContent='✓';setTimeout(()=>this.textContent='kopiuj',1500)" title="Kopiuj adres kontraktu">${copyIconSVG()} kopiuj</button>`
+      : '';
+    return `<div class="inv-card">
+      <div class="inv-top">
+        <div>
+          <div class="inv-sym">${t.symbol}</div>
+          <div class="inv-name">${t.name.slice(0,28)}</div>
+        </div>
+        <span class="inv-signal ${t.sigClass}">${t.signal}</span>
+      </div>
+      <div class="inv-score-row">
+        <span style="font-size:11px;color:var(--sub);width:52px;flex-shrink:0">AML score</span>
+        <div class="inv-score-bar"><div class="inv-score-fill" style="width:${t.score}%;background:${barColor}"></div></div>
+        <span class="inv-score-num" style="color:${barColor}">${t.score}</span>
+      </div>
+      <div class="inv-facts">
+        <div class="inv-fact">Clean wallets: <strong style="color:var(--green)">${t.cleanWallets}</strong> of ${t.totalWallets} analysed</div>
+        ${suspLine}${dangerLine}
+        <div class="inv-fact">Total transfers: <strong>${fmtTx(t.totalTx)}</strong></div>
+      </div>
+      <div class="inv-reason">${t.reason}</div>
+      <div class="inv-addr">
+        <div class="addr-row">
+          <a class="ethlink" href="${ethUrl}" target="_blank" rel="noopener" title="Otwórz token na Etherscan">
+            ${ethIconSVG()} ${addrDisplay}
+          </a>
+          ${copyBtn}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('invest-section').innerHTML = `
+    <div class="inv-wrap">
+      <div class="inv-disclaimer">
+        ⚠️ <strong>Not financial advice.</strong> These signals are derived purely from on-chain AML data —
+        how often a token appears in clean vs. dangerous wallets. This is one data point among many.
+        Always do your own research before buying any asset.
+      </div>
+      <div class="inv-grid">${cards}</div>
+    </div>`;
+}
+
+function renderStats(m) {
+  const ac = m.agreement_rate>=70?'var(--green)':m.agreement_rate>=50?'var(--orange)':'var(--red)';
+  const ws = _data.wallets.filter(w=>w.expected!=null);
+  const ruleAcc = ws.length ? Math.round(ws.filter(w=>w.ruleOk).length/ws.length*100) : null;
+  const lstmAcc = ws.length ? Math.round(ws.filter(w=>w.lstmOk).length/ws.length*100) : null;
+  const accColor = a => a>=80?'var(--green)':a>=60?'var(--orange)':'var(--red)';
+  $('stats').innerHTML = [
+    {l:'Wallets',v:m.n_wallets,s:'in dataset'},
+    {l:'Transactions',v:Number(m.n_transactions).toLocaleString(),s:`${m.date_range.start} → ${m.date_range.end}`},
+    {l:'Rule avg risk',v:m.rule_stats.mean,c:rc(m.rule_stats.mean),s:`max ${m.rule_stats.max}`},
+    {l:'LSTM avg risk',v:m.lstm_stats.mean,c:rc(m.lstm_stats.mean),s:`max ${m.lstm_stats.max}`},
+    {l:'Rule accuracy',v:ruleAcc!=null?ruleAcc+'%':'—',c:ruleAcc!=null?accColor(ruleAcc):'var(--sub)',s:'vs expected verdicts'},
+    {l:'LSTM accuracy',v:lstmAcc!=null?lstmAcc+'%':'—',c:lstmAcc!=null?accColor(lstmAcc):'var(--sub)',s:'vs expected verdicts'},
+    {l:'Agreement rate',v:m.agreement_rate+'%',c:ac,s:'within ±15 points'},
+  ].map(({l,v,c,s})=>`<div class="sc"><div class="sc-l">${l}</div><div class="sc-v" style="color:${c||'var(--text)'}">${v}</div><div class="sc-s">${s}</div></div>`).join('');
+}
+
+function setFilter(btn, f) {
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act'); _filter=f;
+  renderWallets(_data.wallets);
+}
+
+function tokenBlock(tokens) {
+  if (!tokens || tokens.length === 0) return '';
+  const chips = tokens.map(t => {
+    const inAmt  = t.in_amount  > 0 ? '↓ ' + (t.in_amount  > 1e6 ? (t.in_amount/1e6).toFixed(1)+'M' : t.in_amount > 1e3 ? (t.in_amount/1e3).toFixed(1)+'K' : t.in_amount.toFixed(2)) : '';
+    const outAmt = t.out_amount > 0 ? '↑ ' + (t.out_amount > 1e6 ? (t.out_amount/1e6).toFixed(1)+'M' : t.out_amount > 1e3 ? (t.out_amount/1e3).toFixed(1)+'K' : t.out_amount.toFixed(2)) : '';
+    const tokenAddr = TOKEN_ADDRESSES[t.symbol];
+    const ethUrl = tokenAddr ? `https://etherscan.io/token/${tokenAddr}` : `https://etherscan.io/search?f=0&q=${t.symbol}`;
+    return '<div class="token-chip">'
+      + '<span class="token-sym">' + t.symbol + '</span>'
+      + '<span class="token-name">' + t.name + '</span>'
+      + '<div class="token-stats">'
+      + (inAmt  ? '<span class="token-in">'  + inAmt  + '</span>' : '')
+      + (outAmt ? '<span class="token-out">' + outAmt + '</span>' : '')
+      + '</div>'
+      + '<div class="token-links">'
+      + `<a class="ethlink" href="${ethUrl}" target="_blank" rel="noopener" title="Token na Etherscan" style="font-size:9px;padding:1px 5px">${ethIconSVG()} Etherscan</a>`
+      + (tokenAddr ? `<button class="copy-btn" style="font-size:9px;padding:1px 5px" onclick="copyToClipboard('${tokenAddr}');this.textContent='✓';setTimeout(()=>this.innerHTML='${copyIconSVG()} kopiuj',1500)">${copyIconSVG()} kopiuj</button>` : '')
+      + '</div>'
+      + '</div>';
+  }).join('');
+  return '<div class="token-block"><h4>Token transfers (ERC-20)</h4><div class="token-grid">' + chips + '</div></div>';
+}
+
+function expBlock(w) {
+  if (!w.expected) return '';
+  const evCls = w.expected==='DANGEROUS'?'vm-fail':w.expected==='SUSPICIOUS'?'vm-warn':'vm-ok';
+  const rCls  = w.ruleOk?'vm-ok':'vm-fail';
+  const lCls  = w.lstmOk?'vm-ok':'vm-fail';
+  const rTxt  = w.ruleOk?'✓ correct':'✗ wrong — got '+w.rule.verdict;
+  const lTxt  = w.lstmOk?'✓ correct':'✗ wrong — got '+w.lstm.verdict;
+  return '<div class="exp-block">'
+    + '<div class="exp-row"><span class="exp-lbl">Expected verdict</span><span class="vm '+evCls+'">'+w.expected+'</span></div>'
+    + '<div class="exp-row"><span class="exp-lbl">Rule accuracy</span><span class="vm '+rCls+'">'+rTxt+'</span></div>'
+    + '<div class="exp-row"><span class="exp-lbl">LSTM accuracy</span><span class="vm '+lCls+'">'+lTxt+'</span></div>'
+    + '<div class="exp-row"><span class="exp-lbl">Why</span><span class="exp-note">'+w.expectedNote+'</span></div>'
+    + '</div>';
+}
+
+function renderWallets(wallets) {
+  const vis = wallets.filter(w => {
+    if(_filter==='all') return true;
+    if(_filter==='dangerous') return w.rule.score>=60||w.lstm.score>=60;
+    if(_filter==='suspicious') return (w.rule.score>=30&&w.rule.score<60)||(w.lstm.score>=30&&w.lstm.score<60);
+    if(_filter==='clean') return w.rule.score<30&&w.lstm.score<30;
+    if(_filter==='diverge') return !w.agreement;
+    if(_filter==='wrong') return (w.expected && (!w.ruleOk || !w.lstmOk));
+    return true;
+  });
+
+  $('wlist').innerHTML = vis.map((w,i)=>{
+    const d = w.delta;
+    const ds = d>0?`+${d}`:`${d}`;
+    const dc = Math.abs(d)<=5?'ag':Math.abs(d)<=15?'cl':'di';
+    const dl = Math.abs(d)<=5?'agree':Math.abs(d)<=15?'±close':'diverge';
+
+    const rr = (w.rule.reasons||[]).map(r=>`<div class="ri">${r}</div>`).join('')||'<div class="ri">No anomalies detected.</div>';
+    const lr = (w.lstm.reasons||[]).map(r=>{
+      const a=parseFloat((r.match(/attn=([\d.]+)/)||[])[1]||0);
+      return `<div class="ri ${a>.4?'hi':a>.2?'mi':''}">${r}</div>`;
+    }).join('')||'<div class="ri">No high-attention transactions.</div>';
+
+    const maxR = 30;
+    const rbHTML = Object.entries(w.rule.breakdown||{}).map(([k,v])=>`
+      <div class="fbr"><span class="fbn">${k}</span>
+      <div class="fbw"><div class="fbb" style="width:${Math.round(Math.min(v,maxR)/maxR*100)}%;background:var(--rule)"></div></div>
+      <span class="fbv">${v} pts</span></div>`).join('');
+
+    const maxL = Math.max(...Object.values(w.lstm.breakdown||{0.001:0.001}).map(Number),0.001);
+    const lbHTML = Object.entries(w.lstm.breakdown||{}).map(([k,v])=>`
+      <div class="fbr"><span class="fbn">${k}</span>
+      <div class="fbw"><div class="fbb" style="width:${Math.round(v/maxL*100)}%;background:var(--lstm)"></div></div>
+      <span class="fbv">${typeof v==='number'?v.toFixed(3):v}</span></div>`).join('');
+
+    const catColors = {'Public figure':'#7c3aed','CEX hot wallet':'#0369a1','CEX cold wallet':'#075985','DeFi protocol':'#065f46','Mixer / Sanctioned':'#9f1239','NFT Whale':'#92400e'};
+    const cc = catColors[w.category]||'#374151';
+
+    // Build address row — shown in card header (always visible)
+    const addrRowHtml = addrRow(w.wallet, '');
+
+    return `<div class="wcard" id="wc${i}">
+      <div class="wct" onclick="tog(${i})">
+        <div>
+          <div class="wn">${w.label}</div>
+          <div class="wa">${w.wallet}</div>
+          ${addrRowHtml}
+          <span class="wcat" style="border-color:${cc};color:${cc}">${w.category}</span>
+        </div>
+        <div class="scol">
+          <div class="slbl r">RULE-BASED</div>
+          <div class="sbw"><div class="sb" style="width:${w.rule.score}%;background:${w.rule.color}"></div></div>
+          <div class="sbot"><span class="snum" style="color:${w.rule.color}">${w.rule.score}</span><span style="color:var(--sub);font-size:13px">/100</span><span class="chip c${vc(w.rule.verdict)}">${w.rule.verdict}</span></div>
+        </div>
+        <div class="scol">
+          <div class="slbl l">LSTM</div>
+          <div class="sbw"><div class="sb" style="width:${w.lstm.score}%;background:${w.lstm.color}"></div></div>
+          <div class="sbot"><span class="snum" style="color:${w.lstm.color}">${w.lstm.score}</span><span style="color:var(--sub);font-size:13px">/100</span><span class="chip c${vc(w.lstm.verdict)}">${w.lstm.verdict}</span>${w.lstm.prob!==undefined?`<span style="font-family:var(--mono);font-size:10px;color:var(--sub)">p=${w.lstm.prob}</span>`:''}</div>
+        </div>
+        <div class="dcol"><div class="dv ${dc}">${ds}</div><div class="dl">${dl}</div></div>
+      </div>
+      <div class="eh" id="eh${i}" onclick="tog(${i})">▸ expand findings</div>
+      <div class="wd" id="wd${i}">
+        <div class="dc r"><h4>Rule-based findings</h4><div>${rr}</div><h4 style="margin-top:14px">Score breakdown</h4>${rbHTML}</div>
+        <div class="dc l">
+          <h4>LSTM attention highlights</h4><div>${lr}</div>
+          <h4 style="margin-top:14px">Feature importance</h4>${lbHTML}
+          ${expBlock(w)}
+          ${tokenBlock(w.tokens)}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tog(i) {
+  const d=$(`wd${i}`), h=$(`eh${i}`);
+  d.classList.toggle('op');
+  h.textContent = d.classList.contains('op') ? '▾ collapse' : '▸ expand findings';
+}
+
+function renderTable(wallets) {
+  $('tbody').innerHTML = wallets.map(w=>{
+    const d=w.delta, ds=d>0?`+${d}`:`${d}`;
+    const dc=d>0?'var(--lstm)':d<0?'var(--rule)':'var(--sub)';
+    const expColor = w.expected==='DANGEROUS'?'var(--red)':w.expected==='SUSPICIOUS'?'var(--orange)':'var(--green)';
+    const fullAddr = resolveAddress(w.wallet) || w.wallet;
+    const shortDisplay = fullAddr.slice(0,8)+'...'+fullAddr.slice(-6);
+    return `<tr>
+      <td>
+        <div style="font-weight:600">${w.label}</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap">
+          <a class="ethlink" href="${ethscanWalletLink(w.wallet)}" target="_blank" rel="noopener" title="Otwórz na Etherscan" style="font-size:9px;padding:1px 6px">${ethIconSVG()} ${shortDisplay}</a>
+          <button class="copy-btn" style="font-size:9px;padding:1px 6px" onclick="copyToClipboard('${fullAddr}');this.textContent='✓';setTimeout(()=>this.textContent='kopiuj',1500)">${copyIconSVG()} kopiuj</button>
+        </div>
+        <div style="font-size:11px;color:var(--sub);margin-top:2px">${w.category}</div>
+      </td>
+      <td><span style="font-family:var(--mono);font-size:16px;color:${w.rule.color}">${w.rule.score}</span></td>
+      <td><span style="font-family:var(--mono);font-size:16px;color:${w.lstm.color}">${w.lstm.score}</span></td>
+      <td><span style="font-family:var(--mono);font-size:16px;color:${dc}">${ds}</span></td>
+      <td><span class="chip c${vc(w.rule.verdict)}">${w.rule.verdict}</span></td>
+      <td><span class="chip c${vc(w.lstm.verdict)}">${w.lstm.verdict}</span></td>
+      <td>${w.expected?`<span style="font-family:var(--mono);font-size:11px;font-weight:600;color:${expColor}">${w.expected}</span>`:'-'}</td>
+      <td>${w.expected!=null?`<span style="color:${w.ruleOk?'var(--green)':'var(--red)'}"><strong>${w.ruleOk?'✓':'✗'}</strong></span>`:'-'}</td>
+      <td>${w.expected!=null?`<span style="color:${w.lstmOk?'var(--green)':'var(--red)'}"><strong>${w.lstmOk?'✓':'✗'}</strong></span>`:'-'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderScatter(wallets) {
+  const canvas = $('scatter');
+  const W = canvas.parentElement.clientWidth - 40;
+  const H = 300;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  canvas.width = W*devicePixelRatio; canvas.height = H*devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const pad = {l:52,r:20,t:16,b:46};
+  const pw = W-pad.l-pad.r, ph = H-pad.t-pad.b;
+
+  ctx.font = '11px JetBrains Mono, monospace';
+  [0,25,50,75,100].forEach(v => {
+    const x=pad.l+v/100*pw, y=pad.t+(1-v/100)*ph;
+    ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=1; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,pad.t+ph); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+pw,y); ctx.stroke();
+    ctx.fillStyle='rgba(107,127,163,.55)'; ctx.textAlign='center';
+    ctx.fillText(v, x, pad.t+ph+16);
+    ctx.textAlign='right'; ctx.fillText(v, pad.l-7, y+4);
+  });
+
+  ctx.fillStyle='rgba(107,127,163,.75)'; ctx.font='12px Space Grotesk,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('Rule-based score →', pad.l+pw/2, H-3);
+  ctx.save(); ctx.translate(14,pad.t+ph/2); ctx.rotate(-Math.PI/2); ctx.fillText('LSTM score →',0,0); ctx.restore();
+
+  [30,60].forEach(v => {
+    const c=v===60?'rgba(248,113,113,.25)':'rgba(251,146,60,.25)';
+    ctx.strokeStyle=c; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l+v/100*pw,pad.t); ctx.lineTo(pad.l+v/100*pw,pad.t+ph); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.l,pad.t+(1-v/100)*ph); ctx.lineTo(pad.l+pw,pad.t+(1-v/100)*ph); ctx.stroke();
+  });
+
+  ctx.setLineDash([5,5]); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t+ph); ctx.lineTo(pad.l+pw,pad.t); ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.font='10px Space Grotesk,sans-serif'; ctx.fillStyle='rgba(107,127,163,.5)'; ctx.textAlign='center';
+  ctx.fillText('Both clean', pad.l+15/100*pw, pad.t+(1-15/100)*ph-10);
+  ctx.fillText('Both dangerous', pad.l+80/100*pw, pad.t+(1-80/100)*ph-10);
+
+  wallets.forEach(w => {
+    const cx=pad.l+w.rule.score/100*pw, cy=pad.t+(1-w.lstm.score/100)*ph, r=7;
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r*3);
+    const gc=w.agreement?'rgba(74,222,128,':'rgba(251,146,60,';
+    g.addColorStop(0,gc+'.2)'); g.addColorStop(1,gc+'0)');
+    ctx.beginPath(); ctx.arc(cx,cy,r*3,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2,Math.PI/2); ctx.lineTo(cx,cy); ctx.closePath();
+    ctx.fillStyle=w.rule.color; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI/2,1.5*Math.PI); ctx.lineTo(cx,cy); ctx.closePath();
+    ctx.fillStyle=w.lstm.color; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,.2)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.fillStyle='rgba(226,232,244,.7)'; ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='left';
+    ctx.fillText(w.label.split('(')[0].trim().slice(0,13), cx+r+3, cy+4);
+  });
+}
+</script>
+</body>
+</html>

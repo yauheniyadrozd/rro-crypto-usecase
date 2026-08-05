@@ -1,0 +1,4122 @@
+{
+  "meta": {
+    "generated": "2026-05-26T07:34:48.417547+00:00",
+    "n_wallets": 25,
+    "n_transactions": 194507,
+    "date_range": {
+      "start": "2015-08-07",
+      "end": "2026-05-15"
+    },
+    "rule_stats": {
+      "mean": 33.9,
+      "max": 85,
+      "dangerous": 7,
+      "suspicious": 4,
+      "clean": 14
+    },
+    "lstm_stats": {
+      "mean": 40.3,
+      "max": 70,
+      "dangerous": 10,
+      "suspicious": 4,
+      "clean": 11
+    },
+    "agreement_rate": 84.0
+  },
+  "wallets": [
+    {
+      "wallet": "0x3f5ce5fbfe3e9af3971dd833d26ba9b5c936f0be",
+      "label": "Binance (main)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Licensed exchange \u2014 high volume is expected and legal, but pattern complexity warrants monitoring. Not DANGEROUS despite volume.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 84,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [5 nodes]: 0x08b4\u2026076b -> OKX -> 0x52c8\u2026eafe -> Binance -> Binance -> 0x08b4\u2026076b",
+          "Cycle [2 nodes]: Binance -> Binance -> Binance",
+          "Cycle [2 nodes]: Binance -> 0x0c19\u20263894 -> Binance",
+          "... and 1 more cycle(s)",
+          "Fast transit: funds forwarded 709 time(s) within 1h of receipt (96% of incoming txs)",
+          "Structuring: 25 transfers -> 0x002b\u2026459d",
+          "Structuring: 8 transfers -> 0x03d2\u20268ea0",
+          "Structuring: 19 transfers -> 0x047d\u20260a7a",
+          "Fan-out: sends to 2658 unique addresses (threshold: 10)",
+          "Fan-in: receives from 606 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 19,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 69,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.017] Sent 0.5050 ETH to 0x00a52b\u20265cd3 at 2017-08-16 10:18 UTC",
+          "[attn=0.016] Received 50000.0000 ETH from 0xf97781\u2026acec at 2020-06-15 09:55 UTC",
+          "[attn=0.016] Received 50000.0000 ETH from 0xf97781\u2026acec at 2020-06-09 12:05 UTC"
+        ],
+        "breakdown": {
+          "Log value": 15.21,
+          "Hour of day": 0.73,
+          "Outgoing": 0.78,
+          "CP entropy": 0.35,
+          "Cumul. out": 1.56,
+          "TX gap": 1.13,
+          "Night flag": 0.34,
+          "Relative value": 0.4,
+          "Round num": 0.05
+        },
+        "prob": 0.6881
+      },
+      "delta": -15,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "GMT",
+          "name": "STEPN",
+          "in_count": 2,
+          "out_count": 298,
+          "in_amount": 25004607059.680775,
+          "out_amount": 14850676736.837914
+        },
+        {
+          "symbol": "BAL",
+          "name": "Balancer",
+          "in_count": 148,
+          "out_count": 3,
+          "in_amount": 85115.8297590001,
+          "out_amount": 85499.384759
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 115,
+          "out_count": 24,
+          "in_amount": 321666895.15772945,
+          "out_amount": 22716570.935727004
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 112,
+          "out_count": 15,
+          "in_amount": 16230723.68920201,
+          "out_amount": 16226559.701735001
+        },
+        {
+          "symbol": "CHZ",
+          "name": "chiliZ",
+          "in_count": 113,
+          "out_count": 10,
+          "in_amount": 85557145.52151921,
+          "out_amount": 99354815.25016613
+        },
+        {
+          "symbol": "ENJ",
+          "name": "EnjinCoin",
+          "in_count": 107,
+          "out_count": 8,
+          "in_amount": 4948684.349896141,
+          "out_amount": 4948684.34989614
+        },
+        {
+          "symbol": "SAND",
+          "name": "SAND",
+          "in_count": 103,
+          "out_count": 9,
+          "in_amount": 10300000.069999997,
+          "out_amount": 29189420.96123885
+        },
+        {
+          "symbol": "TVK",
+          "name": "Terra Virtua Kolect",
+          "in_count": 91,
+          "out_count": 10,
+          "in_amount": 7157524.402692162,
+          "out_amount": 7157524.402692163
+        },
+        {
+          "symbol": "MATIC",
+          "name": "Matic Token",
+          "in_count": 84,
+          "out_count": 12,
+          "in_amount": 5275971.81691136,
+          "out_amount": 5275971.816911361
+        },
+        {
+          "symbol": "XDATA",
+          "name": "Streamr (old)",
+          "in_count": 90,
+          "out_count": 5,
+          "in_amount": 2924820.0,
+          "out_amount": 2924820.0
+        },
+        {
+          "symbol": "CVC",
+          "name": "Civic",
+          "in_count": 87,
+          "out_count": 7,
+          "in_amount": 7207935.176542147,
+          "out_amount": 8017341.1750602
+        },
+        {
+          "symbol": "LRC",
+          "name": "LoopringCoin V2",
+          "in_count": 89,
+          "out_count": 4,
+          "in_amount": 9165604.200000001,
+          "out_amount": 9775584.507153451
+        },
+        {
+          "symbol": "OMG",
+          "name": "OMG Network",
+          "in_count": 78,
+          "out_count": 9,
+          "in_amount": 1471601.8530255589,
+          "out_amount": 1471601.8530255598
+        },
+        {
+          "symbol": "REEF",
+          "name": "Reef.finance",
+          "in_count": 77,
+          "out_count": 6,
+          "in_amount": 227691954.99748322,
+          "out_amount": 227690954.99748322
+        },
+        {
+          "symbol": "MKR",
+          "name": "Maker",
+          "in_count": 78,
+          "out_count": 3,
+          "in_amount": 572.9282529999992,
+          "out_amount": 920.304253
+        }
+      ]
+    },
+    {
+      "wallet": "0x6cc5f688a315f3dc28a7781717a9a798a59fda7b",
+      "label": "OKX (hot)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "OKX operates globally including Asia \u2014 high night activity (UTC) is expected for an Asian exchange.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 85,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0x0bc1\u2026bfd5 -> OKX -> 0x0bc1\u2026bfd5",
+          "Cycle [2 nodes]: 0xd185\u20269de2 -> OKX -> 0xd185\u20269de2",
+          "Cycle [2 nodes]: 0xbdc9\u2026d943 -> OKX -> 0xbdc9\u2026d943",
+          "... and 35 more cycle(s)",
+          "Fast transit: funds forwarded 6811 time(s) within 1h of receipt (98% of incoming txs)",
+          "Structuring: 6 transfers -> 0x03ea\u20261731",
+          "Structuring: 6 transfers -> 0x05b2\u2026482d",
+          "Structuring: 5 transfers -> 0x0a7e\u20265f93",
+          "Fan-out: sends to 2419 unique addresses (threshold: 10)",
+          "Fan-in: receives from 5059 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 20,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 68,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.020] Received 1.5042 ETH from 0x93ca10\u20263739 at 2018-03-22 05:55 UTC",
+          "[attn=0.019] Received 1.0773 ETH from 0xfdb1c3\u20266ba2 at 2018-03-22 06:34 UTC",
+          "[attn=0.019] Received 1.6698 ETH from 0x4a20fc\u2026ad4f at 2018-03-22 05:57 UTC"
+        ],
+        "breakdown": {
+          "Log value": 1.6,
+          "Hour of day": 0.4,
+          "Outgoing": 0.43,
+          "CP entropy": 1.3,
+          "Cumul. out": 1.56,
+          "TX gap": 0.0,
+          "Night flag": 1.56,
+          "Relative value": 0.0,
+          "Round num": 0.02
+        },
+        "prob": 0.6811
+      },
+      "delta": -17,
+      "agreement": false,
+      "tokens": [
+        {
+          "symbol": "PEPE",
+          "name": "Pepe",
+          "in_count": 173,
+          "out_count": 244,
+          "in_amount": 1235962751838.6875,
+          "out_amount": 16584786205484.334
+        },
+        {
+          "symbol": "OM",
+          "name": "MANTRA DAO",
+          "in_count": 336,
+          "out_count": 70,
+          "in_amount": 17296688.58623406,
+          "out_amount": 65595510.1997666
+        },
+        {
+          "symbol": "BIGTIME",
+          "name": "Big Time",
+          "in_count": 190,
+          "out_count": 184,
+          "in_amount": 26307853.525900744,
+          "out_amount": 247879913.47667044
+        },
+        {
+          "symbol": "ATH",
+          "name": "Aethir Token",
+          "in_count": 196,
+          "out_count": 107,
+          "in_amount": 20716441.565205645,
+          "out_amount": 601010576.6375484
+        },
+        {
+          "symbol": "SHIB",
+          "name": "SHIBA INU",
+          "in_count": 96,
+          "out_count": 193,
+          "in_amount": 163629109152.51038,
+          "out_amount": 8538460155097.827
+        },
+        {
+          "symbol": "ARB",
+          "name": "Arbitrum",
+          "in_count": 123,
+          "out_count": 151,
+          "in_amount": 195358753.55318648,
+          "out_amount": 200376077.11911282
+        },
+        {
+          "symbol": "API3",
+          "name": "API3",
+          "in_count": 84,
+          "out_count": 136,
+          "in_amount": 1454494.4977301857,
+          "out_amount": 3516610.4202084183
+        },
+        {
+          "symbol": "AGLD",
+          "name": "Adventure Gold",
+          "in_count": 9,
+          "out_count": 195,
+          "in_amount": 49595.10298689,
+          "out_amount": 7365098.548623772
+        },
+        {
+          "symbol": "LAMB",
+          "name": "Lambda",
+          "in_count": 9,
+          "out_count": 185,
+          "in_amount": 9801071.78675641,
+          "out_amount": 3605882780.4735837
+        },
+        {
+          "symbol": "UNI",
+          "name": "Uniswap",
+          "in_count": 112,
+          "out_count": 79,
+          "in_amount": 1174515.8333765771,
+          "out_amount": 13169818.693330025
+        },
+        {
+          "symbol": "LINK",
+          "name": "ChainLink Token",
+          "in_count": 66,
+          "out_count": 106,
+          "in_amount": 178822.1272850475,
+          "out_amount": 4549324.399668489
+        },
+        {
+          "symbol": "Auction",
+          "name": "Bounce Token",
+          "in_count": 125,
+          "out_count": 36,
+          "in_amount": 221125.55744940237,
+          "out_amount": 909347.81177479
+        },
+        {
+          "symbol": "MOVE",
+          "name": "Movement",
+          "in_count": 48,
+          "out_count": 105,
+          "in_amount": 2246528.6982110403,
+          "out_amount": 67265893.54710364
+        },
+        {
+          "symbol": "ZRO",
+          "name": "LayerZero",
+          "in_count": 51,
+          "out_count": 95,
+          "in_amount": 639872.4503145299,
+          "out_amount": 2933787.2296396988
+        },
+        {
+          "symbol": "DAI",
+          "name": "Dai Stablecoin",
+          "in_count": 65,
+          "out_count": 78,
+          "in_amount": 9038733.685131347,
+          "out_amount": 11477218.677515088
+        }
+      ]
+    },
+    {
+      "wallet": "0x2910543af39aba0cd09dbb2d50200b3e800a63d2",
+      "label": "Kraken (hot #1)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Licensed EU exchange. 00:00 UTC bursts are end-of-day settlement \u2014 standard treasury operation.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 76,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0x7125\u2026c197 -> Kraken -> 0x7125\u2026c197",
+          "Cycle [2 nodes]: 0xa256\u2026911f -> Kraken -> 0xa256\u2026911f",
+          "Cycle [2 nodes]: 0xce26\u2026ca16 -> Kraken -> 0xce26\u2026ca16",
+          "... and 68 more cycle(s)",
+          "Fast transit: funds forwarded 2268 time(s) within 1h of receipt (56% of incoming txs)",
+          "Structuring: 5 transfers -> 0x00be\u2026fa77",
+          "Structuring: 14 transfers -> 0x0202\u2026b7e3",
+          "Structuring: 91 transfers -> 0x03e2\u2026e644",
+          "Fan-out: sends to 1843 unique addresses (threshold: 10)",
+          "Fan-in: receives from 1627 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 11,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 70,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.020] Sent 766.9950 ETH to 0x571348\u20269484 at 2016-01-26 14:04 UTC",
+          "[attn=0.019] Sent 142.7816 ETH to 0x762e53\u2026e2c2 at 2016-01-26 14:06 UTC",
+          "[attn=0.018] Sent 9850.5450 ETH to 0x19ae27\u20269e7e at 2016-01-26 14:28 UTC"
+        ],
+        "breakdown": {
+          "Log value": 7.57,
+          "Hour of day": 0.64,
+          "Outgoing": 1.42,
+          "CP entropy": 1.22,
+          "Cumul. out": 1.56,
+          "TX gap": 0.02,
+          "Night flag": 0.89,
+          "Relative value": 0.0,
+          "Round num": 0.0
+        },
+        "prob": 0.7044
+      },
+      "delta": -6,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "Johnson",
+          "name": "Johnson Metaverse",
+          "in_count": 16,
+          "out_count": 0,
+          "in_amount": 50645342053718.79,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "TheDAO",
+          "name": "TheDAO",
+          "in_count": 4,
+          "out_count": 8,
+          "in_amount": 8161.968331034483,
+          "out_amount": 178985.0833310345
+        },
+        {
+          "symbol": "Epic Games",
+          "name": "Epic Games",
+          "in_count": 9,
+          "out_count": 0,
+          "in_amount": 11916106515468.771,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "APE",
+          "name": "Otherside APE",
+          "in_count": 7,
+          "out_count": 0,
+          "in_amount": 12825619804456.27,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MOONBIRD",
+          "name": "Moonbirds",
+          "in_count": 7,
+          "out_count": 0,
+          "in_amount": 1609586541244.884,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "$BOSON",
+          "name": "Boson Token",
+          "in_count": 7,
+          "out_count": 0,
+          "in_amount": 64600000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "CLO",
+          "name": "Clover",
+          "in_count": 2,
+          "out_count": 4,
+          "in_amount": 550000000.0,
+          "out_amount": 1002273356326.4021
+        },
+        {
+          "symbol": "Twitter",
+          "name": "ElonMusk Twitter",
+          "in_count": 6,
+          "out_count": 0,
+          "in_amount": 7281443888416.478,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "ZAPP",
+          "name": "Zapper.Fi",
+          "in_count": 0,
+          "out_count": 5,
+          "in_amount": 0.0,
+          "out_amount": 1128319.7427758197
+        },
+        {
+          "symbol": "MetaMask",
+          "name": "MetaMask DAO",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 5780601646539.532,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Hasbro",
+          "name": "Hasbro Metaverse",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 367229409641.12,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Patek Philippe",
+          "name": "Patek Philippe Metaverse",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 5853593183108.055,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "GAL",
+          "name": "Project Galaxy",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 3993826379.312337,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Otherside",
+          "name": "APE Otherside",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 6624847713.123987,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "VISA",
+          "name": "VISA Metaverse",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 5218768980387.846,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x1919db36ca2fa2e15f9000fd9cdc2edcf863e685",
+      "label": "NFT Whale #1 (0x1919)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Possible wash-trading pattern. LSTM should elevate score vs rules. CLEAN = under-detection; DANGEROUS = over-detection.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 71,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0xc3cc\u2026ea32 -> NFT Whale #1 -> 0xc3cc\u2026ea32",
+          "Cycle [2 nodes]: 0x8298\u20263326 -> NFT Whale #1 -> 0x8298\u20263326",
+          "Cycle [2 nodes]: 0x6639\u20266daa -> NFT Whale #1 -> 0x6639\u20266daa",
+          "... and 2 more cycle(s)",
+          "Fast transit: funds forwarded 218 time(s) within 1h of receipt (63% of incoming txs)",
+          "Structuring: 23 transfers -> 0x0000\u20265127",
+          "Structuring: 22 transfers -> 0x0000\u202687ac",
+          "Structuring: 14 transfers -> 0x0232\u2026379f",
+          "Fan-out: sends to 14 unique addresses (threshold: 10)",
+          "Fan-in: receives from 19 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 13,
+          "Structuring": 15,
+          "Fan-out": 4,
+          "Fan-in": 9,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 69,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.020] Sent 38.9749 ETH to 0x3b968d\u20266f88 at 2023-04-21 14:04 UTC",
+          "[attn=0.019] Sent 38.9707 ETH to 0x3b968d\u20266f88 at 2023-04-21 14:04 UTC",
+          "[attn=0.018] Sent 0.0000 ETH to 0xb47e3c\u20263bbb at 2023-04-21 22:07 UTC"
+        ],
+        "breakdown": {
+          "Log value": 2.44,
+          "Hour of day": 1.15,
+          "Outgoing": 1.54,
+          "CP entropy": 0.61,
+          "Cumul. out": 1.56,
+          "TX gap": 0.01,
+          "Night flag": 0.0,
+          "Relative value": 0.08,
+          "Round num": 0.95
+        },
+        "prob": 0.6918
+      },
+      "delta": -2,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "Blur Pool",
+          "name": "Blur Pool",
+          "in_count": 2032,
+          "out_count": 1584,
+          "in_amount": 24524.649899596465,
+          "out_amount": 24549.02643487652
+        },
+        {
+          "symbol": "\u03fe",
+          "name": "CRYPTOPUNKS",
+          "in_count": 1154,
+          "out_count": 1146,
+          "in_amount": 1154.0,
+          "out_amount": 1146.0
+        },
+        {
+          "symbol": "PUNK",
+          "name": "CryptoPunks",
+          "in_count": 402,
+          "out_count": 479,
+          "in_amount": 250928.95087809052,
+          "out_amount": 103.63135564619924
+        },
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 742,
+          "out_count": 16,
+          "in_amount": 5674.877453282511,
+          "out_amount": 489.29019999999997
+        },
+        {
+          "symbol": "CIG",
+          "name": "Cigarette Token",
+          "in_count": 568,
+          "out_count": 17,
+          "in_amount": 124192401.93180026,
+          "out_amount": 56407482.86599161
+        },
+        {
+          "symbol": "wstETH",
+          "name": "Wrapped liquid staked Ether 2.0",
+          "in_count": 198,
+          "out_count": 218,
+          "in_amount": 4148.639334163603,
+          "out_amount": 4128.335825783517
+        },
+        {
+          "symbol": "\u03bc\u03fe721",
+          "name": "\u03bcCryptoPunks 721",
+          "in_count": 179,
+          "out_count": 215,
+          "in_amount": 42106272.727973655,
+          "out_amount": 42106272.727973655
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 33,
+          "out_count": 33,
+          "in_amount": 1734436.175514,
+          "out_amount": 1734436.1755139998
+        },
+        {
+          "symbol": "xPUNK",
+          "name": "xPUNK",
+          "in_count": 24,
+          "out_count": 33,
+          "in_amount": 29.151047509939747,
+          "out_amount": 29.15069339700156
+        },
+        {
+          "symbol": "ETH",
+          "name": "ETH",
+          "in_count": 1,
+          "out_count": 55,
+          "in_amount": 250.0,
+          "out_amount": 9099.199999999999
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 20,
+          "out_count": 19,
+          "in_amount": 3976444.584262,
+          "out_amount": 5096031.724625001
+        },
+        {
+          "symbol": "TESLA AI",
+          "name": "Tesla AI",
+          "in_count": 35,
+          "out_count": 0,
+          "in_amount": 2732265283860010.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "E\ua4d4H",
+          "name": "E\ua4d4H",
+          "in_count": 0,
+          "out_count": 27,
+          "in_amount": 0.0,
+          "out_amount": 2244.959999004
+        },
+        {
+          "symbol": "NVIDIA AI",
+          "name": "Nvidia AI",
+          "in_count": 26,
+          "out_count": 0,
+          "in_amount": 1.2527441422162522e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BLUR",
+          "name": "Blur",
+          "in_count": 4,
+          "out_count": 10,
+          "in_amount": 1708755.1755381762,
+          "out_amount": 1708755.17553817
+        }
+      ]
+    },
+    {
+      "wallet": "0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+      "label": "Vitalik Buterin (VB2)",
+      "expected": "CLEAN",
+      "expectedNote": "Secondary public address, low activity, no suspicious patterns documented.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 67,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [2 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "... and 3 more cycle(s)",
+          "Fast transit: funds forwarded 34 time(s) within 1h of receipt (2% of incoming txs)",
+          "Structuring: 5 transfers -> 0x0000\u20262734",
+          "Structuring: 20 transfers -> 0x1db3\u20266ee6",
+          "Structuring: 7 transfers -> 0x6131\u202637b5",
+          "Fan-out: sends to 29 unique addresses (threshold: 10)",
+          "Fan-in: receives from 44 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 0,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 2
+        }
+      },
+      "lstm": {
+        "score": 65,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.019] Received 0.0000 ETH from 0x675a38\u20266dd6 at 2026-05-04 12:02 UTC",
+          "[attn=0.018] Received 0.0000 ETH from 0x675a38\u20266dd6 at 2026-05-04 12:02 UTC",
+          "[attn=0.018] Sent 50.2513 ETH to 0x681880\u20266b46 at 2026-05-15 06:27 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.11,
+          "Hour of day": 0.67,
+          "Outgoing": 0.05,
+          "CP entropy": 0.16,
+          "Cumul. out": 1.56,
+          "TX gap": 0.16,
+          "Night flag": 0.58,
+          "Relative value": 0.0,
+          "Round num": 1.53
+        },
+        "prob": 0.6536
+      },
+      "delta": -2,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "ETH",
+          "name": "World Computer",
+          "in_count": 18,
+          "out_count": 893,
+          "in_amount": 77037062830.8281,
+          "out_amount": 21058017485.863796
+        },
+        {
+          "symbol": "MEGA",
+          "name": "Make Ethereum Great Again",
+          "in_count": 2,
+          "out_count": 783,
+          "in_amount": 121351591.0,
+          "out_amount": 564732922.5289128
+        },
+        {
+          "symbol": "$ USDCFree.com - Visit to claim",
+          "name": "$ USDCFree.com - Visit to claim Token",
+          "in_count": 0,
+          "out_count": 450,
+          "in_amount": 0.0,
+          "out_amount": 3016800.0
+        },
+        {
+          "symbol": "Vitalik",
+          "name": "Vitalik",
+          "in_count": 1,
+          "out_count": 312,
+          "in_amount": 1000000000.0,
+          "out_amount": 5070959497.025747
+        },
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 55,
+          "out_count": 120,
+          "in_amount": 259164638.0884652,
+          "out_amount": 518029679.24369925
+        },
+        {
+          "symbol": "NVIDIA AI",
+          "name": "Nvidia AI",
+          "in_count": 174,
+          "out_count": 0,
+          "in_amount": 2.568208110009536e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "TESLA AI",
+          "name": "Tesla AI",
+          "in_count": 137,
+          "out_count": 0,
+          "in_amount": 7957775721444544.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 33,
+          "out_count": 52,
+          "in_amount": 339781.09738399996,
+          "out_amount": 453242.80908100004
+        },
+        {
+          "symbol": "UNI-V2",
+          "name": "Uniswap V2",
+          "in_count": 6,
+          "out_count": 56,
+          "in_amount": 103507.8485503143,
+          "out_amount": 126814888.79429165
+        },
+        {
+          "symbol": "Hachiko",
+          "name": "\u30cf\u30c1\u516c",
+          "in_count": 62,
+          "out_count": 0,
+          "in_amount": 10778516205.755047,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "AERO",
+          "name": "Aerodrome",
+          "in_count": 60,
+          "out_count": 0,
+          "in_amount": 1.0000019017120667e+22,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DEEPSEEK AI",
+          "name": "DeepSeek AI",
+          "in_count": 60,
+          "out_count": 0,
+          "in_amount": 8780566388414598.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "PI",
+          "name": "Pi Network",
+          "in_count": 60,
+          "out_count": 0,
+          "in_amount": 650981276731.3445,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Hachi",
+          "name": "\u30cf\u30c1\u516c",
+          "in_count": 57,
+          "out_count": 0,
+          "in_amount": 7440912089.488215,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "POE2.0",
+          "name": "Proof Of ETH2.0",
+          "in_count": 50,
+          "out_count": 0,
+          "in_amount": 6892792527991752.0,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "label": "Vitalik Buterin (vitalik.eth)",
+      "expected": "CLEAN",
+      "expectedNote": "Well-known public address. Donations, grants, public transfers only. No illicit links.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 65,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "Cycle [3 nodes]: 0x1db3\u20266ee6 -> Vitalik Bute -> Vitalik Bute -> 0x1db3\u20266ee6",
+          "... and 1 more cycle(s)",
+          "Fast transit: funds forwarded 88 time(s) within 1h of receipt (1% of incoming txs)",
+          "Structuring: 354 transfers -> \u2026",
+          "Structuring: 7 transfers -> 0x0e71\u202693b5",
+          "Structuring: 6 transfers -> 0x1219\u202691fb",
+          "Fan-out: sends to 100 unique addresses (threshold: 10)",
+          "Fan-in: receives from 23 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 0,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 66,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.019] Received 0.0007 ETH from 0x87f9d2\u2026958e at 2024-10-12 17:05 UTC",
+          "[attn=0.018] Received 0.0007 ETH from 0x000014\u20266111 at 2024-10-12 17:05 UTC",
+          "[attn=0.018] Sent 0.0100 ETH to 0xab5801\u2026ec9b at 2026-02-28 00:23 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.1,
+          "Outgoing": 0.11,
+          "CP entropy": 1.29,
+          "Cumul. out": 1.56,
+          "TX gap": 0.08,
+          "Night flag": 0.03,
+          "Relative value": 0.0,
+          "Round num": 1.53
+        },
+        "prob": 0.6591
+      },
+      "delta": 1,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "AsteroShib.com",
+          "name": "AsteroShib.com",
+          "in_count": 0,
+          "out_count": 8705,
+          "in_amount": 0.0,
+          "out_amount": 349069365.8152115
+        },
+        {
+          "symbol": "CMD",
+          "name": "Ten Commandments",
+          "in_count": 566,
+          "out_count": 0,
+          "in_amount": 27966013.865433592,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "ALPHA",
+          "name": "alpha",
+          "in_count": 395,
+          "out_count": 0,
+          "in_amount": 35272773.4881096,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "POOL",
+          "name": "Vitalik Pool Party",
+          "in_count": 7,
+          "out_count": 7,
+          "in_amount": 2850255.810131562,
+          "out_amount": 2233782.2894269666
+        },
+        {
+          "symbol": "vitalik0",
+          "name": "vitalik0",
+          "in_count": 8,
+          "out_count": 0,
+          "in_amount": 111232.63354596114,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WCDOGE",
+          "name": "WORLD CUP DOGE",
+          "in_count": 5,
+          "out_count": 0,
+          "in_amount": 9989431629133972.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "AWF",
+          "name": "Animal Welfare Fund",
+          "in_count": 5,
+          "out_count": 0,
+          "in_amount": 57656641.566446,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 1,
+          "out_count": 3,
+          "in_amount": 0.11674,
+          "out_amount": 120133.877066
+        },
+        {
+          "symbol": "ZCHF",
+          "name": "Frankencoin",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 2.001,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WORLDCUP26",
+          "name": "WORLD CUP 2026",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 34709813250202.58,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FWC",
+          "name": "FIFA WORLD CUP",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 1200000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WORLDCUP",
+          "name": "World Cup Coin",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 30000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "SUPPER",
+          "name": "Last Supper",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 6000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "OPTIMUS",
+          "name": "Optimus Prime",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 30000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "CAT",
+          "name": "Royal Cat",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 2.0,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0xd551234ae421e3bcba99a0da6d736074f22192ff",
+      "label": "Binance (hot #2)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "CEX hot wallet \u2014 fast transit is normal exchange mechanic, not structuring. Should not be DANGEROUS.",
+      "ruleOk": true,
+      "lstmOk": false,
+      "rule": {
+        "score": 58,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "Cycle [5 nodes]: 0x08b4\u2026076b -> OKX -> 0x52c8\u2026eafe -> Binance -> Binance -> 0x08b4\u2026076b",
+          "Fast transit: funds forwarded 4 time(s) within 1h of receipt (100% of incoming txs)",
+          "Structuring: 7 transfers -> 0x08f5\u2026ccd8",
+          "Structuring: 30 transfers -> 0x0abd\u202604ea",
+          "Structuring: 37 transfers -> 0x0d87\u202687ef",
+          "Fan-out: sends to 3266 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Binance",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 10,
+          "Fast transit": 20,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 3
+        }
+      },
+      "lstm": {
+        "score": 68,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.019] Sent 0.0000 ETH to 0x99ea4d\u2026b80d at 2018-01-09 00:22 UTC",
+          "[attn=0.018] Sent 0.4135 ETH to 0xab5801\u2026ec9b at 2021-05-15 09:19 UTC",
+          "[attn=0.018] Sent 0.0000 ETH to 0xf230b7\u202642e2 at 2018-01-09 00:22 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.68,
+          "Hour of day": 0.01,
+          "Outgoing": 1.56,
+          "CP entropy": 1.25,
+          "Cumul. out": 1.56,
+          "TX gap": 0.03,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 0.86
+        },
+        "prob": 0.6798
+      },
+      "delta": 10,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "$ BUSDBonus.com",
+          "name": "$ BUSDBonus.com",
+          "in_count": 0,
+          "out_count": 9954,
+          "in_amount": 0.0,
+          "out_amount": 69678000.0
+        },
+        {
+          "symbol": "zkSync",
+          "name": "zkSync Token",
+          "in_count": 4,
+          "out_count": 0,
+          "in_amount": 12275321.575001858,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 23.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "LPX",
+          "name": "Launchpad.xyz",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 999999291.6274077,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "B0x",
+          "name": "B Zero X",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "A7A5",
+          "name": "A7A5",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1.999999,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "NBITS",
+          "name": "NovaBITS",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 600.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "ETHG",
+          "name": "Ethereum Games",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 2000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 0.05125,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Claim at zk-claim.io",
+          "name": "ZK",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 100000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MONAD",
+          "name": "Monad",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 8000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "AEVO",
+          "name": "AEVO",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 50000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "NIBI",
+          "name": "Nibiru Chain",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 100000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FARC",
+          "name": "Farcaster",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 100000000.0,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x8589427373d6d84e98730d7795d8f6f8731fda16",
+      "label": "Tornado Cash (0.1 ETH pool)",
+      "expected": "DANGEROUS",
+      "expectedNote": "OFAC sanctioned. Micro-denomination pool. Score below 70 = model failure.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 60,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "Cycle [2 nodes]: 0xd130\u20260dd6 -> Tornado Cash -> 0xd130\u20260dd6",
+          "Cycle [2 nodes]: 0xa43c\u20267cb0 -> Tornado Cash -> 0xa43c\u20267cb0",
+          "Cycle [2 nodes]: Tornado Cash -> 0xcef8\u202650f5 -> Tornado Cash",
+          "... and 1 more cycle(s)",
+          "Fast transit: funds forwarded 6 time(s) within 1h of receipt (9% of incoming txs)",
+          "Structuring: 41 transfers -> \u2026",
+          "Structuring: 6 transfers -> 0x1111\u2026f3ae",
+          "Structuring: 11 transfers -> 0x1111\u2026a48b",
+          "Fan-out: sends to 41 unique addresses (threshold: 10)",
+          "Fan-in: receives from 13 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 2,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 3,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 66,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.019] Received 0.0000 ETH from 0xd86f4f\u2026524c at 2026-04-13 09:45 UTC",
+          "[attn=0.019] Received 0.0000 ETH from 0xd86f4f\u2026524c at 2026-04-13 09:29 UTC",
+          "[attn=0.018] Sent 0.0000 ETH to 0x527653\u202631ce at 2021-05-16 02:02 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.09,
+          "Hour of day": 0.67,
+          "Outgoing": 0.69,
+          "CP entropy": 0.47,
+          "Cumul. out": 1.56,
+          "TX gap": 0.65,
+          "Night flag": 0.15,
+          "Relative value": 0.0,
+          "Round num": 1.42
+        },
+        "prob": 0.6597
+      },
+      "delta": 6,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "cUSDC",
+          "name": "Compound USD Coin",
+          "in_count": 7,
+          "out_count": 9,
+          "in_amount": 10446398.68004154,
+          "out_amount": 10446398.67998231
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 7,
+          "out_count": 8,
+          "in_amount": 17821.683580000004,
+          "out_amount": 17820.78358
+        },
+        {
+          "symbol": "DAI",
+          "name": "Dai Stablecoin",
+          "in_count": 7,
+          "out_count": 5,
+          "in_amount": 46309.85098647702,
+          "out_amount": 46309.85098647702
+        },
+        {
+          "symbol": "USDT",
+          "name": "USDT",
+          "in_count": 5,
+          "out_count": 5,
+          "in_amount": 25763.669161,
+          "out_amount": 4885.439161
+        },
+        {
+          "symbol": "SAI",
+          "name": "Sai Stablecoin v1.0",
+          "in_count": 2,
+          "out_count": 2,
+          "in_amount": 35.2138,
+          "out_amount": 35.2138
+        },
+        {
+          "symbol": "ANON",
+          "name": "ANON",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 252500.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "ENS",
+          "name": "Ethereum Name Service",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 69.61596196198495,
+          "out_amount": 69.61596196198495
+        },
+        {
+          "symbol": "1INCH",
+          "name": "1INCH Token",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 927.9829623021074,
+          "out_amount": 927.9829623021074
+        },
+        {
+          "symbol": "TORN",
+          "name": "Torn Token",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 446.87001000000004,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "PAN",
+          "name": "Panvala pan",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 11724.278884104666,
+          "out_amount": 11724.278884104666
+        },
+        {
+          "symbol": "TPT",
+          "name": "Toilet Paper Token",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 20000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 58.898834967045445,
+          "out_amount": 58.898834967045445
+        },
+        {
+          "symbol": "cDAI",
+          "name": "Compound Dai",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 3036.58053243,
+          "out_amount": 3036.58053243
+        },
+        {
+          "symbol": "HQG",
+          "name": "\u73af\u7403\u80a1",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 0.168888,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FNF",
+          "name": "Fidelity National Financial",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 202104.0,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x564286362092d8e7936f0549571a803b203aaced",
+      "label": "Binance (hot #3)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Night activity reflects 24/7 exchange operations across timezones \u2014 not inherently suspicious for a CEX.",
+      "ruleOk": true,
+      "lstmOk": false,
+      "rule": {
+        "score": 55,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "Cycle [2 nodes]: Binance -> 0xe28d\u202639df -> Binance",
+          "Fast transit: funds forwarded 3 time(s) within 1h of receipt (100% of incoming txs)",
+          "Structuring: 7 transfers -> 0x0a0f\u20261640",
+          "Structuring: 8 transfers -> 0x12a1\u20261553",
+          "Structuring: 8 transfers -> 0x1ec7\u2026c979",
+          "Fan-out: sends to 9411 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 10,
+          "Fast transit": 20,
+          "Structuring": 15,
+          "Fan-out": 10,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 69,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.020] Sent 0.5325 ETH to 0x236f80\u20265b5b at 2018-01-07 23:15 UTC",
+          "[attn=0.018] Sent 1.0010 ETH to 0x003763\u2026467b at 2018-01-07 23:20 UTC",
+          "[attn=0.018] Sent 0.1219 ETH to 0x72da91\u2026dac6 at 2018-01-07 23:15 UTC"
+        ],
+        "breakdown": {
+          "Log value": 1.23,
+          "Hour of day": 1.56,
+          "Outgoing": 1.56,
+          "CP entropy": 1.3,
+          "Cumul. out": 1.56,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 0.08
+        },
+        "prob": 0.6891
+      },
+      "delta": 14,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 12,
+          "out_count": 5959,
+          "in_amount": 375772050.55256,
+          "out_amount": 395274760.9449772
+        },
+        {
+          "symbol": "MATIC",
+          "name": "Matic Token",
+          "in_count": 11,
+          "out_count": 1393,
+          "in_amount": 35010007.0,
+          "out_amount": 38312731.43660372
+        },
+        {
+          "symbol": "$ USDCFree.com - Visit to claim",
+          "name": "$ USDCFree.com - Visit to claim Token",
+          "in_count": 0,
+          "out_count": 400,
+          "in_amount": 0.0,
+          "out_amount": 2681600.0
+        },
+        {
+          "symbol": "DAI",
+          "name": "Dai Stablecoin",
+          "in_count": 5,
+          "out_count": 254,
+          "in_amount": 7402386.0,
+          "out_amount": 8613917.471996825
+        },
+        {
+          "symbol": "SLP",
+          "name": "Smooth Love Potion",
+          "in_count": 22,
+          "out_count": 220,
+          "in_amount": 4447332.0,
+          "out_amount": 4682796.0
+        },
+        {
+          "symbol": "AAVE",
+          "name": "Aave Token",
+          "in_count": 2,
+          "out_count": 179,
+          "in_amount": 11218.0,
+          "out_amount": 21217.330115199984
+        },
+        {
+          "symbol": "BAND",
+          "name": "BandToken",
+          "in_count": 2,
+          "out_count": 88,
+          "in_amount": 188530.0,
+          "out_amount": 242002.43349281006
+        },
+        {
+          "symbol": "WBTC",
+          "name": "Wrapped BTC",
+          "in_count": 6,
+          "out_count": 56,
+          "in_amount": 205.28052529,
+          "out_amount": 227.02986799999996
+        },
+        {
+          "symbol": "TUSD",
+          "name": "TrueUSD",
+          "in_count": 1,
+          "out_count": 61,
+          "in_amount": 1946509.0,
+          "out_amount": 4968139.223401
+        },
+        {
+          "symbol": "SUSHI",
+          "name": "SushiToken",
+          "in_count": 1,
+          "out_count": 37,
+          "in_amount": 132701.0,
+          "out_amount": 357220.9101981101
+        },
+        {
+          "symbol": "OGN",
+          "name": "OriginToken",
+          "in_count": 4,
+          "out_count": 33,
+          "in_amount": 844476.0,
+          "out_amount": 1156975.88055114
+        },
+        {
+          "symbol": "SXP",
+          "name": "Swipe",
+          "in_count": 6,
+          "out_count": 30,
+          "in_amount": 307969.971,
+          "out_amount": 423505.74752053997
+        },
+        {
+          "symbol": "MIR",
+          "name": "Wrapped MIR Token",
+          "in_count": 4,
+          "out_count": 29,
+          "in_amount": 283140.0,
+          "out_amount": 349086.58310000005
+        },
+        {
+          "symbol": "HOT",
+          "name": "HoloToken",
+          "in_count": 3,
+          "out_count": 27,
+          "in_amount": 57917191.332,
+          "out_amount": 77564644.15298103
+        },
+        {
+          "symbol": "AGIX",
+          "name": "SingularityNET Token",
+          "in_count": 1,
+          "out_count": 26,
+          "in_amount": 42232.18147089,
+          "out_amount": 42232.18147089001
+        }
+      ]
+    },
+    {
+      "wallet": "0xf977814e90da44bfa03b6295a0616a897441acec",
+      "label": "Binance (hot #20)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Round-number clustering is a Binance internal accounting pattern, not structuring.",
+      "ruleOk": true,
+      "lstmOk": false,
+      "rule": {
+        "score": 54,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "Cycle [2 nodes]: 0x9bf4\u20262d59 -> Binance -> 0x9bf4\u20262d59",
+          "Cycle [2 nodes]: 0xbe0e\u202633e8 -> Binance -> 0xbe0e\u202633e8",
+          "Cycle [2 nodes]: Binance -> Binance -> Binance",
+          "... and 2 more cycle(s)",
+          "Fast transit: funds forwarded 30 time(s) within 1h of receipt (22% of incoming txs)",
+          "Structuring: 104 transfers -> 0x0000\u2026b376",
+          "Structuring: 16 transfers -> 0x00c8\u2026a7a7",
+          "Structuring: 5 transfers -> 0x0202\u20263ab1",
+          "Fan-out: sends to 13 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Binance"
+        ],
+        "breakdown": {
+          "Transaction cycle": 30,
+          "Fast transit": 4,
+          "Structuring": 15,
+          "Fan-out": 3,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 2
+        }
+      },
+      "lstm": {
+        "score": 68,
+        "verdict": "DANGEROUS",
+        "color": "#FF3B3B",
+        "reasons": [
+          "[attn=0.019] Sent 0.0000 ETH to 0x25f808\u2026cf73 at 2023-02-03 16:13 UTC",
+          "[attn=0.019] Sent 0.0000 ETH to 0x3f382d\u20261550 at 2023-02-09 15:59 UTC",
+          "[attn=0.018] Sent 0.0000 ETH to 0x767fe9\u2026ca0e at 2023-02-03 16:14 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 0.73,
+          "Outgoing": 1.56,
+          "CP entropy": 1.24,
+          "Cumul. out": 1.56,
+          "TX gap": 0.15,
+          "Night flag": 0.31,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.6812
+      },
+      "delta": 14,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "WorldCupAI.pro",
+          "name": "WorldCupAI.pro",
+          "in_count": 0,
+          "out_count": 2291,
+          "in_amount": 0.0,
+          "out_amount": 2291000.0
+        },
+        {
+          "symbol": "FiFaAI.cc",
+          "name": "FiFaAI.cc",
+          "in_count": 0,
+          "out_count": 1763,
+          "in_amount": 0.0,
+          "out_amount": 1763000.0
+        },
+        {
+          "symbol": "AIMevBot.cc",
+          "name": "AIMevBot.cc",
+          "in_count": 0,
+          "out_count": 1690,
+          "in_amount": 0.0,
+          "out_amount": 1690000.0
+        },
+        {
+          "symbol": "AIMevBot.com",
+          "name": "AIMevBot.com",
+          "in_count": 0,
+          "out_count": 1220,
+          "in_amount": 0.0,
+          "out_amount": 1220000.0
+        },
+        {
+          "symbol": "FiFaAI.pro",
+          "name": "FiFaAI.pro",
+          "in_count": 0,
+          "out_count": 1145,
+          "in_amount": 0.0,
+          "out_amount": 1145000.0
+        },
+        {
+          "symbol": "AIFreeUse.cc",
+          "name": "AIFreeUse.cc",
+          "in_count": 0,
+          "out_count": 656,
+          "in_amount": 0.0,
+          "out_amount": 656000.0
+        },
+        {
+          "symbol": "AIFreeUse.pro",
+          "name": "AIFreeUse.pro",
+          "in_count": 0,
+          "out_count": 604,
+          "in_amount": 0.0,
+          "out_amount": 604000.0
+        },
+        {
+          "symbol": "USDGift.cc",
+          "name": "USDGift.cc",
+          "in_count": 0,
+          "out_count": 518,
+          "in_amount": 0.0,
+          "out_amount": 518000.0
+        },
+        {
+          "symbol": "LSK",
+          "name": "Lisk",
+          "in_count": 5,
+          "out_count": 1,
+          "in_amount": 9943848.409,
+          "out_amount": 10498455.295
+        },
+        {
+          "symbol": "HEI",
+          "name": "Heima",
+          "in_count": 4,
+          "out_count": 1,
+          "in_amount": 2665741.931,
+          "out_amount": 1450921.002
+        },
+        {
+          "symbol": "SOLI",
+          "name": "Soli Coin",
+          "in_count": 5,
+          "out_count": 0,
+          "in_amount": 22.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "EDEN",
+          "name": "Eden Token",
+          "in_count": 3,
+          "out_count": 1,
+          "in_amount": 34762961.837,
+          "out_amount": 41085034.057
+        },
+        {
+          "symbol": "Auction",
+          "name": "Bounce Token",
+          "in_count": 3,
+          "out_count": 1,
+          "in_amount": 152429.577,
+          "out_amount": 174173.701
+        },
+        {
+          "symbol": "BEAM",
+          "name": "Beam",
+          "in_count": 3,
+          "out_count": 1,
+          "in_amount": 1248072001.9290001,
+          "out_amount": 1000000000.0
+        },
+        {
+          "symbol": "ALCX",
+          "name": "Alchemix",
+          "in_count": 3,
+          "out_count": 1,
+          "in_amount": 180698.923,
+          "out_amount": 211416.63
+        }
+      ]
+    },
+    {
+      "wallet": "0x28c6c06298d514db089934071355e5743bf21d60",
+      "label": "Binance (#14)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Normal exchange hot wallet behaviour. Fan-in from retail users, redistribution to cold storage.",
+      "ruleOk": false,
+      "lstmOk": true,
+      "rule": {
+        "score": 27,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Cycle [2 nodes]: Binance -> Binance -> Binance",
+          "Fast transit: funds forwarded 1 time(s) within 1h of receipt (3% of incoming txs)",
+          "Structuring: 21 transfers -> 0x07e3\u2026606f",
+          "Structuring: 64 transfers -> 0x0cf0\u2026c023",
+          "Structuring: 115 transfers -> 0x103c\u2026fdf0",
+          "Linked to flagged wallet: Binance"
+        ],
+        "breakdown": {
+          "Transaction cycle": 10,
+          "Fast transit": 1,
+          "Structuring": 15,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 2
+        }
+      },
+      "lstm": {
+        "score": 53,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.029] Received 300000.0000 ETH from 0xf97781\u2026acec at 2021-05-20 16:42 UTC",
+          "[attn=0.029] Received 100000.0000 ETH from 0xf97781\u2026acec at 2021-05-22 00:32 UTC",
+          "[attn=0.029] Received 500000.0000 ETH from 0xf97781\u2026acec at 2021-05-19 00:44 UTC"
+        ],
+        "breakdown": {
+          "Log value": 16.32,
+          "Hour of day": 0.64,
+          "Outgoing": 0.63,
+          "CP entropy": 0.24,
+          "Cumul. out": 0.94,
+          "TX gap": 1.27,
+          "Night flag": 0.27,
+          "Relative value": 0.38,
+          "Round num": 0.14
+        },
+        "prob": 0.5289
+      },
+      "delta": 26,
+      "agreement": false,
+      "tokens": [
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 2546,
+          "out_count": 1857,
+          "in_amount": 193997215.61906365,
+          "out_amount": 253018391.17563927
+        },
+        {
+          "symbol": "ERA",
+          "name": "Caldera",
+          "in_count": 219,
+          "out_count": 76,
+          "in_amount": 19140661.8271516,
+          "out_amount": 10557462.269309029
+        },
+        {
+          "symbol": "WLD",
+          "name": "Worldcoin",
+          "in_count": 175,
+          "out_count": 73,
+          "in_amount": 5775344.699147814,
+          "out_amount": 10809849.340238811
+        },
+        {
+          "symbol": "POND",
+          "name": "Marlin POND",
+          "in_count": 92,
+          "out_count": 103,
+          "in_amount": 624414542.4257722,
+          "out_amount": 264326779.2100426
+        },
+        {
+          "symbol": "ONDO",
+          "name": "Ondo",
+          "in_count": 103,
+          "out_count": 74,
+          "in_amount": 3406031.282026991,
+          "out_amount": 10249575.457560115
+        },
+        {
+          "symbol": "FET",
+          "name": "Fetch",
+          "in_count": 141,
+          "out_count": 33,
+          "in_amount": 7502240.7499081595,
+          "out_amount": 4867284.520053839
+        },
+        {
+          "symbol": "PHA",
+          "name": "Phala",
+          "in_count": 120,
+          "out_count": 40,
+          "in_amount": 42011212.88536123,
+          "out_amount": 15585048.5665537
+        },
+        {
+          "symbol": "RESOLV",
+          "name": "Resolv",
+          "in_count": 133,
+          "out_count": 14,
+          "in_amount": 38117156.84444742,
+          "out_amount": 36873786.978703685
+        },
+        {
+          "symbol": "LINK",
+          "name": "ChainLink Token",
+          "in_count": 84,
+          "out_count": 38,
+          "in_amount": 183343.67619646742,
+          "out_amount": 327662.0257805399
+        },
+        {
+          "symbol": "EIGEN",
+          "name": "Eigen",
+          "in_count": 72,
+          "out_count": 46,
+          "in_amount": 2298817.9410369527,
+          "out_amount": 4031009.1695312303
+        },
+        {
+          "symbol": "SUPER",
+          "name": "SuperVerse",
+          "in_count": 78,
+          "out_count": 28,
+          "in_amount": 4401107.770043079,
+          "out_amount": 7811414.615189899
+        },
+        {
+          "symbol": "GRT",
+          "name": "Graph Token",
+          "in_count": 77,
+          "out_count": 23,
+          "in_amount": 18986739.460384265,
+          "out_amount": 12811372.939620659
+        },
+        {
+          "symbol": "NIL",
+          "name": "Nillion",
+          "in_count": 27,
+          "out_count": 70,
+          "in_amount": 1275739.374313,
+          "out_amount": 2211894.152931
+        },
+        {
+          "symbol": "ENA",
+          "name": "Ethena",
+          "in_count": 60,
+          "out_count": 33,
+          "in_amount": 15910210.345492896,
+          "out_amount": 3493496.1246686704
+        },
+        {
+          "symbol": "PEPE",
+          "name": "Pepe",
+          "in_count": 43,
+          "out_count": 44,
+          "in_amount": 231278663768.09683,
+          "out_amount": 536370687328.6701
+        }
+      ]
+    },
+    {
+      "wallet": "0x71660c4005ba85c37ccec55d0c4493e66fe775d3",
+      "label": "Coinbase (hot #1)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Licensed US exchange (publicly traded). Volume expected. Should not exceed SUSPICIOUS.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 30,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "Fast transit: funds forwarded 8 time(s) within 1h of receipt (89% of incoming txs)",
+          "Structuring: 554 transfers -> 0x0abd\u202604ea",
+          "Structuring: 848 transfers -> 0x1111\u2026c302",
+          "Structuring: 8242 transfers -> 0xa0b8\u2026eb48"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 18,
+          "Structuring": 12,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 45,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.017] Sent 0.0000 ETH to 0xa0b869\u2026eb48 at 2021-05-01 18:26 UTC",
+          "[attn=0.017] Sent 0.0000 ETH to 0x111111\u2026c302 at 2021-05-01 18:26 UTC",
+          "[attn=0.017] Sent 0.0000 ETH to 0xa0b869\u2026eb48 at 2021-05-01 18:26 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.22,
+          "Outgoing": 1.56,
+          "CP entropy": 0.13,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.4538
+      },
+      "delta": 15,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "$ Visit ETH200k.com to claim $200k",
+          "name": "$ ETH200k.com",
+          "in_count": 1,
+          "out_count": 4500,
+          "in_amount": 200000.0,
+          "out_amount": 900000000.0
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 2662,
+          "out_count": 440,
+          "in_amount": 657597768.6967247,
+          "out_amount": 729676495.4563513
+        },
+        {
+          "symbol": "SPELL",
+          "name": "Spell Token",
+          "in_count": 170,
+          "out_count": 190,
+          "in_amount": 2369892130.471715,
+          "out_amount": 2883934562.8702765
+        },
+        {
+          "symbol": "AXS",
+          "name": "Axie Infinity Shard",
+          "in_count": 70,
+          "out_count": 98,
+          "in_amount": 45247.18627155696,
+          "out_amount": 165438.5617921522
+        },
+        {
+          "symbol": "APE",
+          "name": "ApeCoin",
+          "in_count": 87,
+          "out_count": 52,
+          "in_amount": 498704.1748391199,
+          "out_amount": 683943.6559221423
+        },
+        {
+          "symbol": "XCN",
+          "name": "Onyxcoin",
+          "in_count": 52,
+          "out_count": 77,
+          "in_amount": 33792124.845820025,
+          "out_amount": 36607346.73408285
+        },
+        {
+          "symbol": "TRAC",
+          "name": "Trace",
+          "in_count": 57,
+          "out_count": 16,
+          "in_amount": 1321674.8646844146,
+          "out_amount": 3619962.1432539737
+        },
+        {
+          "symbol": "STORJ",
+          "name": "Storj",
+          "in_count": 42,
+          "out_count": 30,
+          "in_amount": 155303.21030203003,
+          "out_amount": 2863000.0864785593
+        },
+        {
+          "symbol": "Metis",
+          "name": "Metis Token",
+          "in_count": 47,
+          "out_count": 23,
+          "in_amount": 29328.22034540744,
+          "out_amount": 36250.7560273658
+        },
+        {
+          "symbol": "1INCH",
+          "name": "1INCH Token",
+          "in_count": 42,
+          "out_count": 15,
+          "in_amount": 553681.6512570854,
+          "out_amount": 2710654.87247939
+        },
+        {
+          "symbol": "POWR",
+          "name": "PowerLedger",
+          "in_count": 21,
+          "out_count": 23,
+          "in_amount": 362888.311512,
+          "out_amount": 3821824.7416059994
+        },
+        {
+          "symbol": "GYEN",
+          "name": "GMO JPY",
+          "in_count": 33,
+          "out_count": 3,
+          "in_amount": 1179612.25701,
+          "out_amount": 298095013.798545
+        },
+        {
+          "symbol": "MONAD",
+          "name": "Monad",
+          "in_count": 31,
+          "out_count": 0,
+          "in_amount": 1615000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FOX",
+          "name": "FOX",
+          "in_count": 14,
+          "out_count": 17,
+          "in_amount": 462189.6620702225,
+          "out_amount": 11713651.045709958
+        },
+        {
+          "symbol": "SYLO",
+          "name": "Sylo",
+          "in_count": 27,
+          "out_count": 2,
+          "in_amount": 32017873.311942372,
+          "out_amount": 98741421.6814007
+        }
+      ]
+    },
+    {
+      "wallet": "0x77696bb39917c91a0c3908d577d5e322095425ca",
+      "label": "Coinbase (hot #3)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Tertiary Coinbase hot wallet \u2014 low anomaly score expected.",
+      "ruleOk": false,
+      "lstmOk": true,
+      "rule": {
+        "score": 28,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fast transit: funds forwarded 20 time(s) within 1h of receipt (95% of incoming txs)",
+          "Structuring: 912 transfers -> 0x09a3\u2026e608",
+          "Structuring: 8962 transfers -> 0x0f5d\u2026c942",
+          "Structuring: 105 transfers -> 0xa744\u2026ac0d"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 19,
+          "Structuring": 9,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 44,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.017] Sent 0.0000 ETH to 0x0f5d2f\u2026c942 at 2021-05-15 15:30 UTC",
+          "[attn=0.017] Sent 0.0000 ETH to 0x0f5d2f\u2026c942 at 2021-05-15 15:29 UTC",
+          "[attn=0.017] Sent 0.0000 ETH to 0x09a3ec\u2026e608 at 2021-05-15 15:30 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.08,
+          "Outgoing": 1.56,
+          "CP entropy": 0.17,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.4426
+      },
+      "delta": 16,
+      "agreement": false,
+      "tokens": [
+        {
+          "symbol": "LUNC",
+          "name": "Wrapped LUNC Token",
+          "in_count": 212,
+          "out_count": 5005,
+          "in_amount": 1147291963.626783,
+          "out_amount": 50577347741.67821
+        },
+        {
+          "symbol": "MANA",
+          "name": "Decentraland",
+          "in_count": 597,
+          "out_count": 1813,
+          "in_amount": 6795638.372195412,
+          "out_amount": 11286587.139002526
+        },
+        {
+          "symbol": "TIME",
+          "name": "ChronoTech Token",
+          "in_count": 183,
+          "out_count": 358,
+          "in_amount": 341566.21976452,
+          "out_amount": 344471.60793558974
+        },
+        {
+          "symbol": "MIR",
+          "name": "Wrapped MIR Token",
+          "in_count": 123,
+          "out_count": 94,
+          "in_amount": 4036640.8937416947,
+          "out_amount": 6751756.875276207
+        },
+        {
+          "symbol": "INV",
+          "name": "Inverse DAO",
+          "in_count": 84,
+          "out_count": 123,
+          "in_amount": 2190.6882147998786,
+          "out_amount": 5801.84032425607
+        },
+        {
+          "symbol": "GLM",
+          "name": "Golem Network Token",
+          "in_count": 111,
+          "out_count": 89,
+          "in_amount": 4343086.31916766,
+          "out_amount": 6594574.382354049
+        },
+        {
+          "symbol": "CB-CR-COMP-USDT",
+          "name": "Coinbase Compound USDT",
+          "in_count": 68,
+          "out_count": 66,
+          "in_amount": 9.538677983910001e-07,
+          "out_amount": 1.737227692354e-06
+        },
+        {
+          "symbol": "ERN",
+          "name": "@EthernityChain $ERN Token",
+          "in_count": 40,
+          "out_count": 87,
+          "in_amount": 105968.04485397846,
+          "out_amount": 377703.8706378218
+        },
+        {
+          "symbol": "KRL",
+          "name": "Kryll",
+          "in_count": 33,
+          "out_count": 85,
+          "in_amount": 316056.49072693853,
+          "out_amount": 2013566.892770445
+        },
+        {
+          "symbol": "GODS",
+          "name": "Gods Unchained",
+          "in_count": 50,
+          "out_count": 67,
+          "in_amount": 1001832.0082231109,
+          "out_amount": 2730549.8230567533
+        },
+        {
+          "symbol": "POLS",
+          "name": "PolkastarterToken",
+          "in_count": 23,
+          "out_count": 41,
+          "in_amount": 421004.56724071974,
+          "out_amount": 1975561.8505001608
+        },
+        {
+          "symbol": "TESLA AI",
+          "name": "Tesla AI",
+          "in_count": 50,
+          "out_count": 0,
+          "in_amount": 4065968719756336.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "GNT",
+          "name": "Golem",
+          "in_count": 10,
+          "out_count": 37,
+          "in_amount": 12288.383761059999,
+          "out_amount": 2018279.8873819613
+        },
+        {
+          "symbol": "\u0415\u0422\u041d",
+          "name": "\u0415\u0422\u041d",
+          "in_count": 42,
+          "out_count": 0,
+          "in_amount": 77.74824168244554,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "NVIDIA AI",
+          "name": "Nvidia AI",
+          "in_count": 39,
+          "out_count": 0,
+          "in_amount": 1.335021147647e+16,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0xae2d4617c862309a3d75a0ffb358c7a5009c673f",
+      "label": "Kraken (hot #2)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Low-activity Kraken wallet. Both models close to SUSPICIOUS/CLEAN boundary \u2014 acceptable.",
+      "ruleOk": false,
+      "lstmOk": true,
+      "rule": {
+        "score": 6,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Structuring: 4892 transfers -> 0xa0b8\u2026eb48",
+          "Structuring: 5107 transfers -> 0xa247\u2026da9d"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 6,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 40,
+        "verdict": "SUSPICIOUS",
+        "color": "#FF9500",
+        "reasons": [
+          "[attn=0.017] Sent 0.0000 ETH to 0xa24787\u2026da9d at 2020-04-28 02:11 UTC",
+          "[attn=0.017] Sent 0.0000 ETH to 0xa0b869\u2026eb48 at 2020-04-28 02:16 UTC",
+          "[attn=0.017] Sent 0.0000 ETH to 0xa24787\u2026da9d at 2020-04-28 01:36 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 0.77,
+          "Outgoing": 1.56,
+          "CP entropy": 0.37,
+          "Cumul. out": 0.0,
+          "TX gap": 0.02,
+          "Night flag": 0.31,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.4025
+      },
+      "delta": 34,
+      "agreement": false,
+      "tokens": [
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 4096,
+          "out_count": 5877,
+          "in_amount": 450135263.87757266,
+          "out_amount": 481041207.25107634
+        },
+        {
+          "symbol": "ARTEMIS",
+          "name": "Artemis",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 2550000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "HEX",
+          "name": "HEX",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 4334.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "HORMUZ",
+          "name": "Strait of Hormuz",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 550000000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "AIG",
+          "name": "AIG",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 8.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "QAI",
+          "name": "QAI",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 10.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WAR",
+          "name": "WAR",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 6.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BlackGold",
+          "name": "BlackGold",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 6.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DubAI",
+          "name": "DubAI",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 25500000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "POWER",
+          "name": "POWER",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 5.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FlashLoan",
+          "name": "FlashLoan",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 5.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "YFTE",
+          "name": "YfTether.io",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 0.01,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Elon Air",
+          "name": "Elon Air",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 2.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "\ua4f4\ua4e2\ua4d3\u0421",
+          "name": "\ua4f4\ua4e2\ua4d3\u0421",
+          "in_count": 0,
+          "out_count": 1,
+          "in_amount": 0.0,
+          "out_amount": 76092.083279
+        }
+      ]
+    },
+    {
+      "wallet": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+      "label": "Uniswap V2 Router",
+      "expected": "CLEAN",
+      "expectedNote": "Immutable AMM smart contract, open source, no custody. Routing is not a layering risk.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 13,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 1597 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Binance",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 3
+        }
+      },
+      "lstm": {
+        "score": 15,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0xab5801\u2026ec9b at 2026-04-29 17:37 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0xab5801\u2026ec9b at 2026-04-29 17:37 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0xab5801\u2026ec9b at 2026-04-29 17:38 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.15,
+          "Outgoing": 0.0,
+          "CP entropy": 0.0,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 1.56
+        },
+        "prob": 0.1529
+      },
+      "delta": 2,
+      "agreement": true,
+      "tokens": []
+    },
+    {
+      "wallet": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "label": "Wrapped ETH (WETH)",
+      "expected": "CLEAN",
+      "expectedNote": "Core DeFi infrastructure. Wrap/unwrap is neutral activity. Both models should stay below SUSPICIOUS.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 13,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 1574 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Vitalik Buterin",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 3
+        }
+      },
+      "lstm": {
+        "score": 13,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.018] Received 0.0000 ETH from 0xf97781\u2026acec at 2022-09-11 06:39 UTC",
+          "[attn=0.018] Received 0.0000 ETH from 0xf97781\u2026acec at 2022-08-20 08:58 UTC",
+          "[attn=0.018] Received 0.0000 ETH from 0xf97781\u2026acec at 2022-06-15 07:47 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.7,
+          "Hour of day": 0.9,
+          "Outgoing": 0.0,
+          "CP entropy": 0.6,
+          "Cumul. out": 0.0,
+          "TX gap": 0.79,
+          "Night flag": 0.14,
+          "Relative value": 0.0,
+          "Round num": 1.3
+        },
+        "prob": 0.1278
+      },
+      "delta": 0,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "Claim $weETH ( t.ly/weETH ) - #21",
+          "name": "weETH AIRDROP",
+          "in_count": 0,
+          "out_count": 2382,
+          "in_amount": 0.0,
+          "out_amount": 2382.0
+        },
+        {
+          "symbol": "ETHG",
+          "name": "Ethereum Games",
+          "in_count": 0,
+          "out_count": 819,
+          "in_amount": 0.0,
+          "out_amount": 5200423348.360564
+        },
+        {
+          "symbol": "$ USDCFree.com - Visit to claim",
+          "name": "$ USDCFree.com - Visit to claim Token",
+          "in_count": 0,
+          "out_count": 600,
+          "in_amount": 0.0,
+          "out_amount": 4022400.0
+        },
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 130,
+          "out_count": 15,
+          "in_amount": 4193083.3019710924,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MORPH",
+          "name": "METAMORPH",
+          "in_count": 128,
+          "out_count": 0,
+          "in_amount": 0.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "TESLA AI",
+          "name": "Tesla AI",
+          "in_count": 53,
+          "out_count": 0,
+          "in_amount": 4822712340352182.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "NVIDIA AI",
+          "name": "Nvidia AI",
+          "in_count": 35,
+          "out_count": 0,
+          "in_amount": 1.244269423847e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 30,
+          "out_count": 1,
+          "in_amount": 52184453.100189,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "E\ua4d4H",
+          "name": "E\ua4d4H",
+          "in_count": 26,
+          "out_count": 0,
+          "in_amount": 50.16541540675973,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 20,
+          "out_count": 0,
+          "in_amount": 1234603.76174,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DOG",
+          "name": "Little Dog",
+          "in_count": 16,
+          "out_count": 0,
+          "in_amount": 236486.49666392,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BABYKIMCHI",
+          "name": "Baby Kimchi Coin",
+          "in_count": 16,
+          "out_count": 0,
+          "in_amount": 1.6000000000000004e-08,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DEEPSEEK AI",
+          "name": "DeepSeek AI",
+          "in_count": 15,
+          "out_count": 0,
+          "in_amount": 4104225715980000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "SOLAXY",
+          "name": "SOLAXY SOLX Qubetics TICS",
+          "in_count": 13,
+          "out_count": 0,
+          "in_amount": 35100000000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MUTUUM",
+          "name": "MutuumPresale MAMO",
+          "in_count": 11,
+          "out_count": 0,
+          "in_amount": 550000000.0,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x910cbd523d972eb0a6f4cae4618ad62622b39dbf",
+      "label": "Tornado Cash (10 ETH pool)",
+      "expected": "DANGEROUS",
+      "expectedNote": "OFAC sanctioned. Identical denomination mixer. Score below 80 = model failure.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 12,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 1778 unique addresses (threshold: 10)",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 2
+        }
+      },
+      "lstm": {
+        "score": 13,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.018] Received 10.0000 ETH from 0x225294\u2026b5da at 2020-10-30 01:37 UTC",
+          "[attn=0.018] Received 10.0000 ETH from 0xe763f4\u20265440 at 2020-10-30 00:05 UTC",
+          "[attn=0.018] Received 10.0000 ETH from 0xd2dc52\u2026dab3 at 2020-10-30 02:10 UTC"
+        ],
+        "breakdown": {
+          "Log value": 1.85,
+          "Hour of day": 1.04,
+          "Outgoing": 0.0,
+          "CP entropy": 0.9,
+          "Cumul. out": 0.0,
+          "TX gap": 0.03,
+          "Night flag": 0.31,
+          "Relative value": 0.77,
+          "Round num": 0.79
+        },
+        "prob": 0.13
+      },
+      "delta": 1,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "LOFE",
+          "name": "LOFE",
+          "in_count": 10,
+          "out_count": 0,
+          "in_amount": 25486360008.78279,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 1e-07,
+          "out_amount": 0.9332308430750202
+        },
+        {
+          "symbol": "FUMO",
+          "name": "Alien Milady Fumo",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 1993740.4976968458,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "STT",
+          "name": "Scatter.cx",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 2.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DIXT",
+          "name": "DIXT.FINANCE",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1e-11,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "ET\u0323H",
+          "name": "ET\u0323H",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 9.492095945963e-06,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "\u13ac\u22a4\u0397",
+          "name": "\u13ac\u22a4\u0397",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 10.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FAM",
+          "name": "yefam.finance",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 3e-09,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "HEX",
+          "name": "HEX",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1895.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "QCORE",
+          "name": "QCORE.FINANCE",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1e-06,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "ARAID",
+          "name": "AirRaid.org",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1809.31,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MADURO",
+          "name": "Nicolas Maduro",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 41.9,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Visit website ethcollect .net to claim rewards",
+          "name": "Visit website ethcollect .net to claim rewards",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 2.7,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MIXQ",
+          "name": "MixQuity.finance",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 157.231567,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MIXQ_Dividend_Tracker",
+          "name": "MIXQ_Dividend_Tracker",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 0.18206171506422084,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43",
+      "label": "Coinbase (hot #2)",
+      "expected": "SUSPICIOUS",
+      "expectedNote": "Secondary hot wallet. Fast transit at typical CEX levels, not mixer-level.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 10,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 2385 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 14,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0x7830c8\u20266f43 at 2022-07-29 09:50 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x7830c8\u20266f43 at 2022-07-29 09:50 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x7830c8\u20266f43 at 2022-07-29 09:50 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.11,
+          "Hour of day": 0.61,
+          "Outgoing": 0.0,
+          "CP entropy": 0.92,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 0.89
+        },
+        "prob": 0.1357
+      },
+      "delta": 4,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 990,
+          "out_count": 3152,
+          "in_amount": 82715884.95341599,
+          "out_amount": 67736399.60738604
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 716,
+          "out_count": 3422,
+          "in_amount": 25753278.020182017,
+          "out_amount": 25820483.65991293
+        },
+        {
+          "symbol": "UNI",
+          "name": "Uniswap",
+          "in_count": 109,
+          "out_count": 12,
+          "in_amount": 58129.52981540955,
+          "out_amount": 91244.55690778038
+        },
+        {
+          "symbol": "ONDO",
+          "name": "Ondo",
+          "in_count": 8,
+          "out_count": 91,
+          "in_amount": 352815.9282093319,
+          "out_amount": 786749.8170800298
+        },
+        {
+          "symbol": "SHIB",
+          "name": "SHIBA INU",
+          "in_count": 3,
+          "out_count": 82,
+          "in_amount": 91236630417.45738,
+          "out_amount": 77192005810.17967
+        },
+        {
+          "symbol": "FET",
+          "name": "Fetch",
+          "in_count": 34,
+          "out_count": 38,
+          "in_amount": 782650.174984169,
+          "out_amount": 2551345.1259677703
+        },
+        {
+          "symbol": "POND",
+          "name": "Marlin POND",
+          "in_count": 23,
+          "out_count": 46,
+          "in_amount": 43568389.30916249,
+          "out_amount": 107029814.72314438
+        },
+        {
+          "symbol": "LINK",
+          "name": "ChainLink Token",
+          "in_count": 10,
+          "out_count": 50,
+          "in_amount": 5941.600544294728,
+          "out_amount": 16996.124804149993
+        },
+        {
+          "symbol": "cbBTC",
+          "name": "Coinbase Wrapped BTC",
+          "in_count": 19,
+          "out_count": 37,
+          "in_amount": 4.135847190000001,
+          "out_amount": 4.012357399999998
+        },
+        {
+          "symbol": "TRAC",
+          "name": "Trace",
+          "in_count": 25,
+          "out_count": 30,
+          "in_amount": 512556.9187335689,
+          "out_amount": 418864.6193879838
+        },
+        {
+          "symbol": "PYUSD",
+          "name": "PayPal USD",
+          "in_count": 23,
+          "out_count": 26,
+          "in_amount": 5121655.381716002,
+          "out_amount": 5082819.991001
+        },
+        {
+          "symbol": "USD1",
+          "name": "World Liberty Financial USD",
+          "in_count": 28,
+          "out_count": 20,
+          "in_amount": 3770690.4591464605,
+          "out_amount": 3668297.8583338065
+        },
+        {
+          "symbol": "WLD",
+          "name": "Worldcoin",
+          "in_count": 10,
+          "out_count": 21,
+          "in_amount": 673648.2088,
+          "out_amount": 965027.3963358845
+        },
+        {
+          "symbol": "LIT",
+          "name": "Lighter",
+          "in_count": 18,
+          "out_count": 13,
+          "in_amount": 216744.87843627605,
+          "out_amount": 150881.39439615802
+        },
+        {
+          "symbol": "GRT",
+          "name": "Graph Token",
+          "in_count": 14,
+          "out_count": 12,
+          "in_amount": 6026776.33796601,
+          "out_amount": 5367629.159702759
+        }
+      ]
+    },
+    {
+      "wallet": "0xe592427a0aece92de3edee1f18e0157c05861564",
+      "label": "Uniswap V3 Router",
+      "expected": "CLEAN",
+      "expectedNote": "Protocol-level contract. Should be CLEAN across both models.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 10,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 2913 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 14,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0xab5801\u2026ec9b at 2026-04-29 08:33 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0xab5801\u2026ec9b at 2021-05-12 17:49 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0xab5801\u2026ec9b at 2026-04-29 09:54 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.2,
+          "Hour of day": 0.83,
+          "Outgoing": 0.0,
+          "CP entropy": 1.0,
+          "Cumul. out": 0.0,
+          "TX gap": 0.06,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 0.99
+        },
+        "prob": 0.1358
+      },
+      "delta": 4,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 2731,
+          "out_count": 4041,
+          "in_amount": 266.2132408448863,
+          "out_amount": 838.9411139583344
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 1029,
+          "out_count": 1029,
+          "in_amount": 9610543.803736001,
+          "out_amount": 9610543.803736001
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 267,
+          "out_count": 267,
+          "in_amount": 683507.9117969997,
+          "out_amount": 683507.9117969997
+        },
+        {
+          "symbol": "WBTC",
+          "name": "Wrapped BTC",
+          "in_count": 110,
+          "out_count": 110,
+          "in_amount": 1.5102118099999997,
+          "out_amount": 1.5102118099999997
+        },
+        {
+          "symbol": "DAI",
+          "name": "Dai Stablecoin",
+          "in_count": 74,
+          "out_count": 74,
+          "in_amount": 249639.59409221,
+          "out_amount": 249639.59409221
+        },
+        {
+          "symbol": "LINK",
+          "name": "ChainLink Token",
+          "in_count": 26,
+          "out_count": 26,
+          "in_amount": 111.70505047068714,
+          "out_amount": 111.70505047068714
+        },
+        {
+          "symbol": "TITANX",
+          "name": "TITAN X",
+          "in_count": 22,
+          "out_count": 22,
+          "in_amount": 20190737038.01383,
+          "out_amount": 20190737038.01383
+        },
+        {
+          "symbol": "DRAGONX",
+          "name": "DragonX",
+          "in_count": 9,
+          "out_count": 9,
+          "in_amount": 739071151.2151783,
+          "out_amount": 739071151.2151783
+        },
+        {
+          "symbol": "AIFreeUse.cc",
+          "name": "AIFreeUse.cc",
+          "in_count": 12,
+          "out_count": 0,
+          "in_amount": 12000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FiFaAI.cc",
+          "name": "FiFaAI.cc",
+          "in_count": 11,
+          "out_count": 0,
+          "in_amount": 11000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "CCDAO",
+          "name": "Cross-Chain DAO",
+          "in_count": 5,
+          "out_count": 5,
+          "in_amount": 699901.3612562066,
+          "out_amount": 699901.3612562066
+        },
+        {
+          "symbol": "XAUt",
+          "name": "Tether Gold",
+          "in_count": 4,
+          "out_count": 4,
+          "in_amount": 1.514631,
+          "out_amount": 1.514631
+        },
+        {
+          "symbol": "USN",
+          "name": "USN",
+          "in_count": 4,
+          "out_count": 4,
+          "in_amount": 93178.55388626664,
+          "out_amount": 93178.55388626664
+        },
+        {
+          "symbol": "AIMevBot.cc",
+          "name": "AIMevBot.cc",
+          "in_count": 8,
+          "out_count": 0,
+          "in_amount": 8000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USD0",
+          "name": "Usual USD",
+          "in_count": 3,
+          "out_count": 3,
+          "in_amount": 5336.857081783142,
+          "out_amount": 5336.857081783142
+        }
+      ]
+    },
+    {
+      "wallet": "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+      "label": "0x Exchange Proxy",
+      "expected": "CLEAN",
+      "expectedNote": "DEX aggregator. Routing through multiple sources superficially resembles layering \u2014 models may flag, but it is a false positive.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 10,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 1164 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 14,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0x479523\u20261223 at 2020-10-12 17:17 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x3a431b\u20268ae6 at 2020-10-12 18:37 UTC",
+          "[attn=0.017] Received 9.0000 ETH from 0x71ddf8\u2026b99c at 2020-10-12 17:11 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.37,
+          "Hour of day": 1.16,
+          "Outgoing": 0.0,
+          "CP entropy": 1.11,
+          "Cumul. out": 0.0,
+          "TX gap": 0.08,
+          "Night flag": 0.07,
+          "Relative value": 0.0,
+          "Round num": 1.26
+        },
+        "prob": 0.1403
+      },
+      "delta": 4,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "WETH",
+          "name": "Wrapped Ether",
+          "in_count": 3790,
+          "out_count": 3928,
+          "in_amount": 2949.443002839066,
+          "out_amount": 4657.470378488869
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 522,
+          "out_count": 522,
+          "in_amount": 1294417.103734001,
+          "out_amount": 1294417.103734001
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 273,
+          "out_count": 272,
+          "in_amount": 685195.4599139999,
+          "out_amount": 685194.7118559999
+        },
+        {
+          "symbol": "DAI",
+          "name": "Dai Stablecoin",
+          "in_count": 187,
+          "out_count": 187,
+          "in_amount": 490946.82555325446,
+          "out_amount": 490946.82555325446
+        },
+        {
+          "symbol": "WBTC",
+          "name": "Wrapped BTC",
+          "in_count": 147,
+          "out_count": 147,
+          "in_amount": 6.162895370000001,
+          "out_amount": 6.162895370000001
+        },
+        {
+          "symbol": "cvxCRV",
+          "name": "Convex CRV",
+          "in_count": 2,
+          "out_count": 2,
+          "in_amount": 206.6879231089742,
+          "out_amount": 206.6879231089742
+        },
+        {
+          "symbol": "LINK",
+          "name": "ChainLink Token",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 0.03567265307810519,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "CRV",
+          "name": "Curve DAO Token",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 26.58763407940164,
+          "out_amount": 26.58763407940164
+        },
+        {
+          "symbol": "ARB",
+          "name": "Arbitrum",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 0.392498751963535,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "FEI",
+          "name": "Fei USD",
+          "in_count": 1,
+          "out_count": 1,
+          "in_amount": 6.559772616964877,
+          "out_amount": 6.559772616964877
+        },
+        {
+          "symbol": "Ayylien",
+          "name": "Ayy Lmao",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 900000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "HEX",
+          "name": "HEX",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 1.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "PEPE",
+          "name": "Pepe",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 172.32,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Visit website gainpepe .org to claim rewards",
+          "name": "Visit website gainpepe .org to claim rewards",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 485384142.5925,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "PEPEBET",
+          "name": "PEPE.bet Token",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 31.2356989,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x00000000219ab540356cbb839cbe05303d7705fa",
+      "label": "ETH 2.0 Beacon Deposit",
+      "expected": "CLEAN",
+      "expectedNote": "Official ETH staking contract. Every deposit is exactly 32 ETH \u2014 mechanical, not suspicious. Rules may over-flag fan-in.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 10,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Fan-in: receives from 1095 unique addresses (threshold: 10)"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 10,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 12,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 32.0000 ETH from 0x711cd2\u20262ca1 at 2020-11-23 14:23 UTC",
+          "[attn=0.017] Received 32.0000 ETH from 0x711cd2\u20262ca1 at 2020-11-23 14:23 UTC",
+          "[attn=0.017] Received 32.0000 ETH from 0x711cd2\u20262ca1 at 2020-11-23 14:23 UTC"
+        ],
+        "breakdown": {
+          "Log value": 5.46,
+          "Hour of day": 0.95,
+          "Outgoing": 0.0,
+          "CP entropy": 0.43,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 1.56,
+          "Round num": 0.0
+        },
+        "prob": 0.125
+      },
+      "delta": 2,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "$ Visit ETHGiftX.com to claim",
+          "name": "$ ETHGiftX.com",
+          "in_count": 0,
+          "out_count": 8852,
+          "in_amount": 0.0,
+          "out_amount": 53112000.0
+        },
+        {
+          "symbol": "Visit https://ezeth.org to claim rewards",
+          "name": "# ezETH.org",
+          "in_count": 3,
+          "out_count": 85,
+          "in_amount": 96.0,
+          "out_amount": 2720.0
+        },
+        {
+          "symbol": "PIKA",
+          "name": "Pikachu",
+          "in_count": 68,
+          "out_count": 0,
+          "in_amount": 7112095738234.366,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "HQG",
+          "name": "\u73af\u7403\u80a1",
+          "in_count": 41,
+          "out_count": 0,
+          "in_amount": 103.063795,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "TESLA AI",
+          "name": "Tesla AI",
+          "in_count": 39,
+          "out_count": 0,
+          "in_amount": 3147257962823268.5,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "NVIDIA AI",
+          "name": "Nvidia AI",
+          "in_count": 32,
+          "out_count": 0,
+          "in_amount": 1.3529775951576402e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DEEPSEEK AI",
+          "name": "DeepSeek AI",
+          "in_count": 17,
+          "out_count": 0,
+          "in_amount": 680183027980000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDT",
+          "name": "Tether USD",
+          "in_count": 15,
+          "out_count": 0,
+          "in_amount": 300347.03000699996,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "AERO",
+          "name": "Aerodrome",
+          "in_count": 12,
+          "out_count": 0,
+          "in_amount": 1.0000015607050122e+22,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MISTRAL AI",
+          "name": "Mistral AI",
+          "in_count": 9,
+          "out_count": 0,
+          "in_amount": 4.784794501421956e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "USDC",
+          "name": "USDC",
+          "in_count": 8,
+          "out_count": 0,
+          "in_amount": 1459.7852240000002,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "JTO",
+          "name": "JITO",
+          "in_count": 7,
+          "out_count": 0,
+          "in_amount": 1.0000000666981587e+23,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "LUMA AI",
+          "name": "Luma AI",
+          "in_count": 7,
+          "out_count": 0,
+          "in_amount": 1.00034612e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "$_$",
+          "name": "Zooba",
+          "in_count": 6,
+          "out_count": 0,
+          "in_amount": 117504.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "GRVT",
+          "name": "GRVT",
+          "in_count": 6,
+          "out_count": 0,
+          "in_amount": 1670007076534477.0,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x220866b1a2219f40e72f5c628b65d54268ca3a9d",
+      "label": "Vitalik Buterin (VB3)",
+      "expected": "CLEAN",
+      "expectedNote": "Tertiary address. Night activity likely reflects timezone of use, not automation.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 3,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "Linked to flagged wallet: Vitalik Buterin",
+          "Linked to flagged wallet: Vitalik Buterin"
+        ],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 3
+        }
+      },
+      "lstm": {
+        "score": 14,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0x0e3796\u20263a9d at 2026-03-27 21:21 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x4c302c\u20267065 at 2026-03-03 21:15 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0x4c302c\u20267065 at 2026-03-03 21:18 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 1.26,
+          "Outgoing": 0.0,
+          "CP entropy": 0.3,
+          "Cumul. out": 0.0,
+          "TX gap": 0.48,
+          "Night flag": 0.05,
+          "Relative value": 0.0,
+          "Round num": 1.54
+        },
+        "prob": 0.1392
+      },
+      "delta": 11,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "NVIDIA AI",
+          "name": "Nvidia AI",
+          "in_count": 128,
+          "out_count": 0,
+          "in_amount": 1.6633843533100954e+16,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "NBA",
+          "name": "Never Broke Again",
+          "in_count": 9,
+          "out_count": 116,
+          "in_amount": 101843028677976.44,
+          "out_amount": 93000000000000.0
+        },
+        {
+          "symbol": "LOVE",
+          "name": "Deesse",
+          "in_count": 1,
+          "out_count": 115,
+          "in_amount": 100000000000000.0,
+          "out_amount": 92800000000000.0
+        },
+        {
+          "symbol": "NAO",
+          "name": "NFT DAO",
+          "in_count": 1,
+          "out_count": 115,
+          "in_amount": 100000000000000.0,
+          "out_amount": 92800000000000.0
+        },
+        {
+          "symbol": "Walmart",
+          "name": "Walmart Meta",
+          "in_count": 94,
+          "out_count": 0,
+          "in_amount": 264840285197022.7,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "TESLA AI",
+          "name": "Tesla AI",
+          "in_count": 92,
+          "out_count": 0,
+          "in_amount": 5979871373258480.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Samsung",
+          "name": "Samsung Metaverse",
+          "in_count": 74,
+          "out_count": 0,
+          "in_amount": 225800969285149.97,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Ukraine",
+          "name": "Ukraine Donation Token (only BUY)",
+          "in_count": 63,
+          "out_count": 0,
+          "in_amount": 187127913179466.9,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Twitter",
+          "name": "ElonMusk Twitter",
+          "in_count": 51,
+          "out_count": 0,
+          "in_amount": 93680770685516.12,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "McDonalds",
+          "name": "McDonalds Metaverse",
+          "in_count": 50,
+          "out_count": 0,
+          "in_amount": 149715288326162.7,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Google",
+          "name": "Google Metaverse",
+          "in_count": 47,
+          "out_count": 0,
+          "in_amount": 136873338784733.2,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "AERO",
+          "name": "Aerodrome",
+          "in_count": 46,
+          "out_count": 0,
+          "in_amount": 1.000001685751791e+22,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "VISA",
+          "name": "VISA Metaverse",
+          "in_count": 43,
+          "out_count": 0,
+          "in_amount": 86801627014833.02,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Epic Games",
+          "name": "Epic Games",
+          "in_count": 42,
+          "out_count": 0,
+          "in_amount": 65263689057207.195,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MetaMask",
+          "name": "MetaMask DAO",
+          "in_count": 40,
+          "out_count": 0,
+          "in_amount": 102396108753364.89,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0x236f233dbf88d2a741e8a4e46b0cf2b3afa11e68",
+      "label": "OKX (cold #2)",
+      "expected": "CLEAN",
+      "expectedNote": "Cold storage address. Infrequent large deposits only. Both models should score very low.",
+      "ruleOk": true,
+      "lstmOk": true,
+      "rule": {
+        "score": 0,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 13,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 0.0,
+          "Outgoing": 0.0,
+          "CP entropy": 0.0,
+          "Cumul. out": 0.0,
+          "TX gap": 0.0,
+          "Night flag": 0.0,
+          "Relative value": 0.0,
+          "Round num": 0.0
+        },
+        "prob": 0.1341
+      },
+      "delta": 13,
+      "agreement": true,
+      "tokens": []
+    },
+    {
+      "wallet": "0xbb93e510bbcd0b7beb5a853875f9ec60275cf498",
+      "label": "Tornado Cash (1 ETH pool)",
+      "expected": "DANGEROUS",
+      "expectedNote": "OFAC sanctioned. Highest structuring signal expected. Score below 75 = model failure.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 0,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 13,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.018] Received 0.0007 ETH from 0x59a43f\u2026eead at 2021-11-21 02:56 UTC",
+          "[attn=0.018] Received 0.0000 ETH from 0x290ca4\u20264e6a at 2025-05-04 00:53 UTC",
+          "[attn=0.018] Received 0.0000 ETH from 0x290ca4\u20264e6a at 2025-05-04 02:03 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.0,
+          "Hour of day": 0.21,
+          "Outgoing": 0.0,
+          "CP entropy": 0.04,
+          "Cumul. out": 0.0,
+          "TX gap": 0.09,
+          "Night flag": 0.14,
+          "Relative value": 0.03,
+          "Round num": 0.47
+        },
+        "prob": 0.1338
+      },
+      "delta": 13,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "WBTC",
+          "name": "Wrapped BTC",
+          "in_count": 1202,
+          "out_count": 1370,
+          "in_amount": 12020.0,
+          "out_amount": 11940.0
+        },
+        {
+          "symbol": "$",
+          "name": "B O N U S - E T H . N E T",
+          "in_count": 3,
+          "out_count": 0,
+          "in_amount": 150000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "DIXT",
+          "name": "DIXT.FINANCE",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 9e-10,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BORK",
+          "name": "Bork by Matt Furie",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 24801371880.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "MASKMAN",
+          "name": "Maskman by Matt Furie",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 29520688233.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "POSEIDON",
+          "name": "Poseidon the Zeus Brother",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 16322972893.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BLOODBOY",
+          "name": "Bloodboy by Matt Furie",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 30238645428.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "PACHAT",
+          "name": "Pac-hat by Matt Furie",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 13971452240.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "The Next Ethereum",
+          "name": "BUTTREUM",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 45802483.06728693,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BABYUNO",
+          "name": "Baby Uno",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 55156403.659798935,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "69XMins",
+          "name": "69XMins",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 23697484406.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BONKIUS",
+          "name": "Bonkius Maximus",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 6154321726.547481,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "TORO",
+          "name": "Toro",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 6.49039442,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "WUKONGI",
+          "name": "CHINESE WUKONG",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 28421659254.026493,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "BULIBULI",
+          "name": "CHINESE ETH BULL",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 28639518356.295025,
+          "out_amount": 0.0
+        }
+      ]
+    },
+    {
+      "wallet": "0xd4b88df4d29f5cedd6857912842cff3b20c8cfa3",
+      "label": "Tornado Cash (100 ETH pool)",
+      "expected": "DANGEROUS",
+      "expectedNote": "OFAC sanctioned since Aug 2022. Fixed-denomination mixer. Both models must score 80+. Any lower score is a model failure.",
+      "ruleOk": false,
+      "lstmOk": false,
+      "rule": {
+        "score": 0,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [],
+        "breakdown": {
+          "Transaction cycle": 0,
+          "Fast transit": 0,
+          "Structuring": 0,
+          "Fan-out": 0,
+          "Fan-in": 0,
+          "Night activity": 0,
+          "Tainted links": 0
+        }
+      },
+      "lstm": {
+        "score": 12,
+        "verdict": "CLEAN",
+        "color": "#30D158",
+        "reasons": [
+          "[attn=0.017] Received 0.0000 ETH from 0x95520d\u2026404e at 2020-10-24 03:50 UTC",
+          "[attn=0.017] Received 0.0200 ETH from 0xe3e5e5\u2026865a at 2020-10-20 10:51 UTC",
+          "[attn=0.017] Received 0.0000 ETH from 0xb7364e\u20269568 at 2020-10-20 10:50 UTC"
+        ],
+        "breakdown": {
+          "Log value": 0.01,
+          "Hour of day": 0.91,
+          "Outgoing": 0.0,
+          "CP entropy": 1.12,
+          "Cumul. out": 0.0,
+          "TX gap": 1.05,
+          "Night flag": 0.26,
+          "Relative value": 0.02,
+          "Round num": 0.87
+        },
+        "prob": 0.1178
+      },
+      "delta": 12,
+      "agreement": true,
+      "tokens": [
+        {
+          "symbol": "DAI",
+          "name": "Dai Stablecoin",
+          "in_count": 413,
+          "out_count": 630,
+          "in_amount": 40900.00722006659,
+          "out_amount": 33600.0
+        },
+        {
+          "symbol": "845$ Visit daiBounty.com to claim",
+          "name": "@ daiBounty.com",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 18.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "This token holders can claim reward token. Please",
+          "name": "(aatu.site)",
+          "in_count": 2,
+          "out_count": 0,
+          "in_amount": 70000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "YFIVE",
+          "name": "YFIVE.FINANCE",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 0.0001,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Earn rewards at https://spkrewards.com",
+          "name": "spkrewards.com",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 400000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Visit https://usd-coin.net to claim rewards",
+          "name": "# usd-coin.net",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 3999.99,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "Invitation token. Please Visit https://atuns.org a",
+          "name": "(atuns.org)",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 40000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "https://ardai.xyz",
+          "name": "ardai.xyz",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 35000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "https://asdai.xyz",
+          "name": "asdai.xyz",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 35000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "mdai.io",
+          "name": "mdai.io",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 60000.0,
+          "out_amount": 0.0
+        },
+        {
+          "symbol": "KTH",
+          "name": "Katerium.com",
+          "in_count": 1,
+          "out_count": 0,
+          "in_amount": 777.0,
+          "out_amount": 0.0
+        }
+      ]
+    }
+  ]
+}

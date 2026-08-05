@@ -1,0 +1,10 @@
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+.env
+output/
+plots/
+*.png
+.DS_Store
+Thumbs.db

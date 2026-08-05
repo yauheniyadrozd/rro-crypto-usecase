@@ -1,0 +1,228 @@
+========================================================================
+  ETH AML DETECTOR — WALLET RISK ASSESSMENT REPORT
+  Generated : 2026-05-11 19:39:27 UTC
+  Wallets   : 7
+  Period    : 2015-08-07 — 2026-05-10
+  Tx total  : 53644
+========================================================================
+
+  SUMMARY
+------------------------------------------------------------------------
+  DANGEROUS  :   4  wallet(s)
+  SUSPICIOUS :   2  wallet(s)
+  CLEAN      :   1  wallet(s)
+
+========================================================================
+  DETAILED RESULTS (sorted by risk, highest first)
+========================================================================
+
+  <!> Kraken (hot #1)
+      Address : 0x2910543Af39abA0Cd09dBb2D50200b3E800A63D2
+      Risk    : [###############-----]  76/100  [DANGEROUS]
+      Findings:
+        * Cycle [2 nodes]: 0xb1a2…d382 -> Kraken ->
+          0xb1a2…d382
+        * Cycle [2 nodes]: 0x7a2d…5b56 -> Kraken ->
+          0x7a2d…5b56
+        * Cycle [2 nodes]: 0x9438…2da5 -> Kraken ->
+          0x9438…2da5
+        * ... and 68 more cycle(s)
+        * Fast transit: funds forwarded 2268 time(s) within
+          1h of receipt (56% of incoming txs)
+        * Structuring: 5 transfers -> 0x00be…fa77
+        * Structuring: 14 transfers -> 0x0202…b7e3
+        * Structuring: 91 transfers -> 0x03e2…e644
+        * Fan-out: sends to 1843 unique addresses
+          (threshold: 10)
+        * Fan-in: receives from 1627 unique addresses
+          (threshold: 10)
+      Score breakdown:
+        Transaction cycle       +30 / 30  [##############################]
+        Fast transit            +11 / 20  [###########---------]
+        Structuring             +15 / 15  [###############]
+        Fan-out                 +10 / 10  [##########]
+        Fan-in                  +10 / 10  [##########]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 0 / 5   [-----]
+------------------------------------------------------------------------
+
+  <!> Binance (main)
+      Address : 0x3f5CE5FBFe3E9af3971dd833D26bA9b5C936f0bE
+      Risk    : [###############-----]  75/100  [DANGEROUS]
+      Findings:
+        * Cycle [2 nodes]: Binance -> 0x0c19…3894 -> Binance
+        * Cycle [2 nodes]: Binance -> 0x0018…5478 -> Binance
+        * Fast transit: funds forwarded 709 time(s) within
+          1h of receipt (100% of incoming txs)
+        * Structuring: 25 transfers -> 0x002b…459d
+        * Structuring: 8 transfers -> 0x03d2…8ea0
+        * Structuring: 19 transfers -> 0x047d…0a7a
+        * Fan-out: sends to 2657 unique addresses
+          (threshold: 10)
+        * Fan-in: receives from 605 unique addresses
+          (threshold: 10)
+      Score breakdown:
+        Transaction cycle       +20 / 30  [####################----------]
+        Fast transit            +20 / 20  [####################]
+        Structuring             +15 / 15  [###############]
+        Fan-out                 +10 / 10  [##########]
+        Fan-in                  +10 / 10  [##########]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 0 / 5   [-----]
+------------------------------------------------------------------------
+
+  <!> Vitalik Buterin (VB public)
+      Address : 0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B
+      Risk    : [#############-------]  67/100  [DANGEROUS]
+      Findings:
+        * Cycle [3 nodes]: Vitalik Bute -> 0x1db3…6ee6 ->
+          Vitalik Bute -> Vitalik Bute
+        * Cycle [2 nodes]: Vitalik Bute -> Vitalik Bute ->
+          Vitalik Bute
+        * Cycle [3 nodes]: Vitalik Bute -> Vitalik Bute ->
+          0x1db3…6ee6 -> Vitalik Bute
+        * ... and 3 more cycle(s)
+        * Fast transit: funds forwarded 33 time(s) within 1h
+          of receipt (2% of incoming txs)
+        * Structuring: 5 transfers -> 0x0000…2734
+        * Structuring: 20 transfers -> 0x1db3…6ee6
+        * Structuring: 7 transfers -> 0x6131…37b5
+        * Fan-out: sends to 28 unique addresses (threshold:
+          10)
+        * Fan-in: receives from 44 unique addresses
+          (threshold: 10)
+        * Linked to flagged wallet: Vitalik Buterin
+      Score breakdown:
+        Transaction cycle       +30 / 30  [##############################]
+        Fast transit            + 0 / 20  [--------------------]
+        Structuring             +15 / 15  [###############]
+        Fan-out                 +10 / 10  [##########]
+        Fan-in                  +10 / 10  [##########]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 2 / 5   [##---]
+------------------------------------------------------------------------
+
+  <!> Vitalik Buterin (vitalik.eth)
+      Address : 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+      Risk    : [#############-------]  65/100  [DANGEROUS]
+      Findings:
+        * Cycle [2 nodes]: Vitalik Bute -> 0x1db3…6ee6 ->
+          Vitalik Bute
+        * Cycle [3 nodes]: Vitalik Bute -> 0x1db3…6ee6 ->
+          Vitalik Bute -> Vitalik Bute
+        * Cycle [2 nodes]: Vitalik Bute -> Vitalik Bute ->
+          Vitalik Bute
+        * ... and 1 more cycle(s)
+        * Fast transit: funds forwarded 88 time(s) within 1h
+          of receipt (1% of incoming txs)
+        * Structuring: 354 transfers -> …
+        * Structuring: 7 transfers -> 0x0e71…93b5
+        * Structuring: 6 transfers -> 0x1219…91fb
+        * Fan-out: sends to 100 unique addresses (threshold:
+          10)
+        * Fan-in: receives from 23 unique addresses
+          (threshold: 10)
+      Score breakdown:
+        Transaction cycle       +30 / 30  [##############################]
+        Fast transit            + 0 / 20  [--------------------]
+        Structuring             +15 / 15  [###############]
+        Fan-out                 +10 / 10  [##########]
+        Fan-in                  +10 / 10  [##########]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 0 / 5   [-----]
+------------------------------------------------------------------------
+
+  /!\ Binance (hot #2)
+      Address : 0xD551234Ae421e3BCBA99A0Da6d736074f22192FF
+      Risk    : [##########----------]  48/100  [SUSPICIOUS]
+      Findings:
+        * Fast transit: funds forwarded 4 time(s) within 1h
+          of receipt (100% of incoming txs)
+        * Structuring: 7 transfers -> 0x08f5…ccd8
+        * Structuring: 30 transfers -> 0x0abd…04ea
+        * Structuring: 37 transfers -> 0x0d87…87ef
+        * Fan-out: sends to 3266 unique addresses
+          (threshold: 10)
+        * Linked to flagged wallet: Binance
+        * Linked to flagged wallet: Vitalik Buterin
+      Score breakdown:
+        Transaction cycle       + 0 / 30  [------------------------------]
+        Fast transit            +20 / 20  [####################]
+        Structuring             +15 / 15  [###############]
+        Fan-out                 +10 / 10  [##########]
+        Fan-in                  + 0 / 10  [----------]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 3 / 5   [###--]
+------------------------------------------------------------------------
+
+  /!\ Coinbase (hot #1)
+      Address : 0x71660c4005BA85c37ccec55d0C4493E66Fe775d3
+      Risk    : [######--------------]  30/100  [SUSPICIOUS]
+      Findings:
+        * Fast transit: funds forwarded 8 time(s) within 1h
+          of receipt (89% of incoming txs)
+        * Structuring: 554 transfers -> 0x0abd…04ea
+        * Structuring: 848 transfers -> 0x1111…c302
+        * Structuring: 8242 transfers -> 0xa0b8…eb48
+      Score breakdown:
+        Transaction cycle       + 0 / 30  [------------------------------]
+        Fast transit            +18 / 20  [##################--]
+        Structuring             +12 / 15  [############---]
+        Fan-out                 + 0 / 10  [----------]
+        Fan-in                  + 0 / 10  [----------]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 0 / 5   [-----]
+------------------------------------------------------------------------
+
+  [OK] Vitalik Buterin (VB3)
+      Address : 0x220866B1A2219f40e72f5c628b65D54268Ca3A9d
+      Risk    : [#-------------------]   3/100  [CLEAN]
+      Findings:
+        * Linked to flagged wallet: Vitalik Buterin
+        * Linked to flagged wallet: Vitalik Buterin
+      Score breakdown:
+        Transaction cycle       + 0 / 30  [------------------------------]
+        Fast transit            + 0 / 20  [--------------------]
+        Structuring             + 0 / 15  [---------------]
+        Fan-out                 + 0 / 10  [----------]
+        Fan-in                  + 0 / 10  [----------]
+        Night activity          + 0 / 10  [----------]
+        Tainted links           + 3 / 5   [###--]
+------------------------------------------------------------------------
+
+========================================================================
+  FLAGGED WALLETS — REQUIRE INVESTIGATION
+========================================================================
+  <!> 0x2910543Af39abA0Cd09dBb2D50200b3E800A63D2
+      Kraken (hot #1)  |  Risk: 76/100  [DANGEROUS]
+      -> Cycle [2 nodes]: 0xb1a2…d382 -> Kraken -> 0xb1a2…d382
+      -> Cycle [2 nodes]: 0x7a2d…5b56 -> Kraken -> 0x7a2d…5b56
+
+  <!> 0x3f5CE5FBFe3E9af3971dd833D26bA9b5C936f0bE
+      Binance (main)  |  Risk: 75/100  [DANGEROUS]
+      -> Cycle [2 nodes]: Binance -> 0x0c19…3894 -> Binance
+      -> Cycle [2 nodes]: Binance -> 0x0018…5478 -> Binance
+
+  <!> 0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B
+      Vitalik Buterin (VB public)  |  Risk: 67/100  [DANGEROUS]
+      -> Cycle [3 nodes]: Vitalik Bute -> 0x1db3…6ee6 -> Vitalik Bute -> Vitalik Bute
+      -> Cycle [2 nodes]: Vitalik Bute -> Vitalik Bute -> Vitalik Bute
+
+  <!> 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+      Vitalik Buterin (vitalik.eth)  |  Risk: 65/100  [DANGEROUS]
+      -> Cycle [2 nodes]: Vitalik Bute -> 0x1db3…6ee6 -> Vitalik Bute
+      -> Cycle [3 nodes]: Vitalik Bute -> 0x1db3…6ee6 -> Vitalik Bute -> Vitalik Bute
+
+  /!\ 0xD551234Ae421e3BCBA99A0Da6d736074f22192FF
+      Binance (hot #2)  |  Risk: 48/100  [SUSPICIOUS]
+      -> Fast transit: funds forwarded 4 time(s) within 1h of receipt (100% of incoming txs)
+      -> Structuring: 7 transfers -> 0x08f5…ccd8
+
+  /!\ 0x71660c4005BA85c37ccec55d0C4493E66Fe775d3
+      Coinbase (hot #1)  |  Risk: 30/100  [SUSPICIOUS]
+      -> Fast transit: funds forwarded 8 time(s) within 1h of receipt (89% of incoming txs)
+      -> Structuring: 554 transfers -> 0x0abd…04ea
+
+========================================================================
+  END OF REPORT
+========================================================================
