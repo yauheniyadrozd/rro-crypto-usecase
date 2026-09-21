@@ -1,5 +1,3 @@
-"""Pobieranie danych z CoinGecko API."""
-
 import time
 import requests
 import pandas as pd
@@ -37,6 +35,25 @@ class CoinGecko:
         }
         return self._fetch_and_parse(url, params)
 
+    def get_current_prices(self, coin_ids: list[str]) -> dict[str, float]:
+        """Zwraca {coin_id: bieżąca cena USD} jednym zapytaniem."""
+        self._throttle()
+        url = f"{COINGECKO_BASE}/simple/price"
+        params = {"ids": ",".join(coin_ids), "vs_currencies": "usd"}
+        try:
+            r = self._session.get(url, params=params, timeout=20)
+            r.raise_for_status()
+        except requests.HTTPError as e:
+            code = e.response.status_code
+            if code == 429:
+                raise APIError("Przekroczono limit API CoinGecko (429). Odczekaj ~60 s i spróbuj ponownie.")
+            raise APIError(f"Błąd HTTP {code}") from e
+        except requests.RequestException as e:
+            raise APIError(f"Błąd połączenia: {e}") from e
+
+        data = r.json()
+        return {cid: float(data[cid]["usd"]) for cid in coin_ids if cid in data}
+
     def _fetch_and_parse(self, url: str, params: dict) -> pd.DataFrame:
         try:
             r = self._session.get(url, params=params, timeout=20)
@@ -44,7 +61,7 @@ class CoinGecko:
         except requests.HTTPError as e:
             code = e.response.status_code
             if code == 429:
-                raise APIError("Przekroczono limit zapytań API. Poczekaj chwilę.")
+                raise APIError("Przekroczono limit API CoinGecko (429). Odczekaj ~60 s i spróbuj ponownie.")
             raise APIError(f"Błąd HTTP {code}") from e
         except requests.RequestException as e:
             raise APIError(f"Błąd połączenia: {e}") from e
@@ -63,7 +80,7 @@ class CoinGecko:
         return df.sort_values("timestamp").reset_index(drop=True)
 
     def _throttle(self):
-        wait = 1.2 - (time.monotonic() - self._last)
+        wait = 2.0 - (time.monotonic() - self._last)
         if wait > 0:
             time.sleep(wait)
         self._last = time.monotonic()

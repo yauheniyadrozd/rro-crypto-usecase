@@ -1,11 +1,10 @@
-"""
-Główne okno aplikacji — Crypto Explorer Pro.
-"""
 from __future__ import annotations
 
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime, timedelta
+import os
+import time
 import threading
 
 import matplotlib
@@ -26,6 +25,9 @@ from .config import (
 )
 from .api import CoinGecko, APIError
 from .indicators import add_indicators, compute_stats
+from .portfolio import Portfolio, rebalance_plan, COIN_IDS, LABELS
+from .rl.policies import build_rebalance_timeline
+from .rl.data import fetch_multi_asset_dataset
 
 FONT_MONO  = ("Courier New", 10)
 FONT_MONO_B = ("Courier New", 10, "bold")
@@ -81,6 +83,8 @@ class App:
         self._df: pd.DataFrame | None = None
         self._mode    = "buy"
         self._loading = False
+        self._portfolio = Portfolio()
+        self._rl_models = None
 
         self._last_sub: pd.DataFrame | None = None
         self._last_t0 = None
@@ -91,6 +95,8 @@ class App:
         self._build_sidebar()
         self._build_charts_area()
         self._build_opt_tab()
+        self._build_portfolio_tab()
+        self._build_agents_tab()
         self._build_statusbar()
 
         self._load_data()
@@ -156,9 +162,13 @@ class App:
 
         self._main = tk.Frame(self.notebook, bg=C_BG)
         self._tab_opt = tk.Frame(self.notebook, bg=C_BG)
+        self._tab_portfolio = tk.Frame(self.notebook, bg=C_BG)
+        self._tab_agents = tk.Frame(self.notebook, bg=C_BG)
 
         self.notebook.add(self._main, text="  Analiza Rynku  ")
         self.notebook.add(self._tab_opt, text="  Optymalizacja Robustna  ")
+        self.notebook.add(self._tab_portfolio, text="  Portfel  ")
+        self.notebook.add(self._tab_agents, text="  Agenci RL  ")
 
     def _build_sidebar(self):
         sidebar = tk.Frame(self._main, bg=C_PANEL2, width=220)
@@ -404,6 +414,467 @@ class App:
 
         self.ax_opt.legend(facecolor=C_PANEL2, edgecolor=C_BORDER, labelcolor=C_TEXT, loc="upper right")
         self.canvas_opt.draw_idle()
+
+    # ── Zakładka: Portfel ────────────────────────────────────────────────
+    def _build_portfolio_tab(self):
+        tab = self._tab_portfolio
+
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure('Treeview', background=C_PANEL, fieldbackground=C_PANEL,
+                        foreground=C_TEXT, borderwidth=0, rowheight=24)
+        style.configure('Treeview.Heading', background=C_PANEL2, foreground=C_TEXT2,
+                        font=FONT_UI_B, borderwidth=0, relief='flat')
+        style.map('Treeview', background=[('selected', C_BORDER)],
+                  foreground=[('selected', C_TEXT)])
+
+        left = tk.Frame(tab, bg=C_BG)
+        left.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        tk.Label(left, text="PORTOFEL — zakup za ~100 USD", bg=C_BG, fg=C_TEXT,
+                 font=("Courier New", 12, "bold"), anchor="w").pack(fill=tk.X, padx=16, pady=(14, 6))
+
+        cols = ("coin", "qty", "buy", "price", "value", "weight", "pnl")
+        self._pf_tree = ttk.Treeview(left, columns=cols, show="headings", height=8)
+        heads = {
+            "coin":   ("Waluta",       "w", 110),
+            "qty":    ("Ilość",        "e", 100),
+            "buy":    ("Cena zakupu",  "e", 120),
+            "price":  ("Cena teraz",   "e", 120),
+            "value":  ("Wartość",      "e", 120),
+            "weight": ("Waga",         "e", 80),
+            "pnl":    ("P&L",          "e", 110),
+        }
+        for c in cols:
+            label, anchor, w = heads[c]
+            self._pf_tree.heading(c, text=label)
+            self._pf_tree.column(c, width=w, anchor=anchor)
+        self._pf_tree.pack(fill=tk.BOTH, expand=True, padx=16, pady=(0, 16))
+
+        right = tk.Frame(tab, bg=C_PANEL2, width=360)
+        right.pack(side=tk.RIGHT, fill=tk.Y, padx=(1, 0))
+        right.pack_propagate(False)
+
+        tk.Label(right, text="PODSUMOWANIE", bg=C_PANEL2, fg=C_TEXT3,
+                 font=("Courier New", 9, "bold"), anchor="w").pack(fill=tk.X, padx=16, pady=(16, 6))
+
+        self._pf_summary_vars = {}
+        for key, label in (("invested", "Zainwestowano"),
+                           ("value", "Wartość bieżąca"),
+                           ("pnl", "Zysk / strata")):
+            row = tk.Frame(right, bg=C_PANEL2)
+            row.pack(fill=tk.X, padx=16, pady=3)
+            tk.Label(row, text=label, bg=C_PANEL2, fg=C_TEXT2, font=FONT_UI,
+                     anchor="w").pack(side=tk.LEFT)
+            var = tk.StringVar(value="─")
+            self._pf_summary_vars[key] = var
+            tk.Label(row, textvariable=var, bg=C_PANEL2, fg=C_TEXT,
+                     font=("Courier New", 11, "bold"), anchor="e").pack(side=tk.RIGHT)
+
+        tk.Button(right, text="  Odśwież ceny  ", command=self._pf_refresh,
+                  bg=C_BORDER, fg=C_TEXT, activebackground=C_PANEL, activeforeground="#ffffff",
+                  font=FONT_MONO_B, relief="flat", bd=0, cursor="hand2", pady=6,
+                  ).pack(fill=tk.X, padx=16, pady=(16, 6))
+
+        tk.Button(right, text="  Rebalansuj wg agentów  ", command=self._pf_rebalance,
+                  bg=C_BORDER, fg=C_TEXT, activebackground=C_PANEL, activeforeground="#ffffff",
+                  font=FONT_MONO_B, relief="flat", bd=0, cursor="hand2", pady=6,
+                  ).pack(fill=tk.X, padx=16, pady=(0, 6))
+
+        self._pf_status = tk.Label(right, text="", bg=C_PANEL2, fg=C_TEXT2, font=FONT_UI_S,
+                                   wraplength=320, justify="left", anchor="w")
+        self._pf_status.pack(fill=tk.X, padx=16, pady=(4, 0))
+
+        self._pf_rebal = tk.Text(right, bg=C_PANEL, fg=C_TEXT, font=("Courier New", 9),
+                                 height=12, relief="flat", bd=4, wrap="word", state="disabled")
+        self._pf_rebal.pack(fill=tk.BOTH, expand=True, padx=16, pady=(8, 16))
+
+        self._pf_refresh()
+
+    def _pf_refresh(self):
+        self._pf_set_status("Pobieranie cen…")
+        threading.Thread(target=self._pf_fetch_prices_thread, daemon=True).start()
+
+    def _pf_fetch_prices_thread(self):
+        try:
+            if getattr(self, "_client", None) is None:
+                self._client = CoinGecko()
+            prices = self._client.get_current_prices(COIN_IDS)
+            self.root.after(0, self._pf_on_prices, prices)
+        except Exception as e:
+            self.root.after(0, self._pf_set_status, f"✗ {e}", C_DOWN)
+
+    def _pf_on_prices(self, prices):
+        if not prices:
+            self._pf_set_status("✗ Brak danych cenowych.", C_DOWN)
+            return
+        snap = self._portfolio.snapshot(prices)
+        self._pf_tree.delete(*self._pf_tree.get_children())
+        for r in snap["rows"]:
+            pnl_sign = "+" if r["pnl"] >= 0 else ""
+            self._pf_tree.insert("", tk.END, values=(
+                r["label"],
+                f"{r['quantity']:g}",
+                f"${r['buy_price']:,.2f}",
+                f"${r['price']:,.2f}",
+                f"${r['value']:,.2f}",
+                f"{r['weight']*100:.1f}%",
+                f"{pnl_sign}{r['pnl']:,.2f}",
+            ))
+        self._pf_summary_vars["invested"].set(f"${snap['total_invested']:,.2f}")
+        self._pf_summary_vars["value"].set(f"${snap['total_value']:,.2f}")
+        pnl, pct = snap["pnl"], snap["pnl_pct"]
+        self._pf_summary_vars["pnl"].set(
+            f"{'+' if pnl >= 0 else ''}{pnl:,.2f} ({'+' if pct >= 0 else ''}{pct:.2f}%)")
+        self._pf_set_status("✓ Ceny odświeżone.")
+
+    def _pf_rebalance(self):
+        self._pf_set_status("Pobieranie danych do rebalancingu…")
+        threading.Thread(target=self._pf_rebalance_thread, daemon=True).start()
+
+    def _pf_rebalance_thread(self):
+        try:
+            if getattr(self, "_client", None) is None:
+                self._client = CoinGecko()
+            prices = self._client.get_current_prices(COIN_IDS)
+
+            frames = getattr(self, "_ag_frames", None)
+            if frames is None:
+                frames = fetch_multi_asset_dataset(COIN_IDS, days=365, cache_dir="data_cache")
+
+            vol = float(sum(float(frames[c]["volatility_21"].iloc[-1]) for c in COIN_IDS) / len(COIN_IDS))
+            plan = rebalance_plan(
+                self._portfolio, prices, vol, enabled=self._ag_enabled(),
+                models=self._ensure_rl_models(), frames=frames)
+            self.root.after(0, self._pf_on_rebalance, plan)
+        except Exception as e:
+            self.root.after(0, self._pf_set_status, f"✗ {e}", C_DOWN)
+
+    def _pf_on_rebalance(self, plan):
+        snap = plan["snapshot"]
+        tw = plan["target_weights"]
+        lines = []
+        lines.append(f"Zmienność rynku: {plan['volatility']:.4f}")
+        lines.append(f"Wartość portfela: ${snap['total_value']:,.2f}")
+        lines.append("")
+        lines.append("Wagi docelowe:")
+        for i, h in enumerate(self._portfolio.holdings):
+            lines.append(f"  {h.label:>4}  {tw[i]*100:5.1f}%")
+        lines.append(f"  GOTÓWKA  {tw[-1]*100:5.1f}%")
+        lines.append("")
+        lines.append("Transakcje (brutto):")
+        for t in plan["trades"]:
+            sign = "+" if t["delta"] >= 0 else ""
+            lines.append(f"  {t['action']:>7} {t['label']:>4}  {sign}${t['delta']:,.2f}")
+        lines.append(f"  -> gotówka (brutto): ${plan['cash_target']:,.2f}")
+        lines.append("")
+        lines.append("Koszty rebalancingu:")
+        lines.append(f"  Opłaty giełdowe (0.1%):  ${plan['total_fee']:,.2f}")
+        lines.append(f"  Podatek od zysku (19%):  ${plan['total_tax']:,.2f}")
+        lines.append(f"  RAZEM:                   ${plan['total_cost']:,.2f}")
+        lines.append(f"  -> gotówka (netto):      ${plan['cash_target'] - plan['total_cost']:,.2f}")
+        self._pf_set_rebal_text("\n".join(lines))
+        self._pf_set_status("✓ Plan rebalancingu wygenerowany.")
+
+    def _pf_set_status(self, msg, color=C_TEXT2):
+        self._pf_status.config(text=msg, fg=color)
+
+    def _pf_set_rebal_text(self, s):
+        self._pf_rebal.config(state="normal")
+        self._pf_rebal.delete("1.0", tk.END)
+        self._pf_rebal.insert("1.0", s)
+        self._pf_rebal.config(state="disabled")
+
+    # ── Zakładka: Agenci RL ──────────────────────────────────────────────
+    def _build_agents_tab(self):
+        tab = self._tab_agents
+        self._ag_timeline = None
+        self._ag_idx = 0
+        self._ag_playing = False
+
+        head = tk.Frame(tab, bg=C_BG)
+        head.pack(fill=tk.X, padx=16, pady=(14, 6))
+        tk.Label(head, text="AGENCI RL — REBALANCING", bg=C_BG, fg=C_TEXT,
+                 font=("Courier New", 12, "bold"), anchor="w").pack(anchor="w")
+        tk.Label(head, text="Pesymista (więcej gotówki) · Realista · Optymista (więcej aktywów). "
+                           "Finalną alokację waży zmienność rynku.",
+                 bg=C_BG, fg=C_TEXT2, font=FONT_UI, anchor="w", justify="left").pack(anchor="w", pady=(2, 0))
+
+        left = tk.Frame(tab, bg=C_BG)
+        left.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.fig_agents = plt.figure(figsize=(8, 5), dpi=96, facecolor=C_BG)
+        self.ax_agents = self.fig_agents.add_subplot(111)
+        self.canvas_agents = FigureCanvasTkAgg(self.fig_agents, master=left)
+        self.canvas_agents.get_tk_widget().pack(fill=tk.BOTH, expand=True,
+                                                padx=(16, 8), pady=(0, 8))
+
+        tk.Label(left, text="PORÓWNANIE AGENTÓW — alokacja w bieżącym dniu",
+                 bg=C_BG, fg=C_TEXT3, font=("Courier New", 8, "bold"),
+                 anchor="w").pack(fill=tk.X, padx=(16, 8))
+
+        ag_cols = ["agent"] + [LABELS[c] for c in COIN_IDS] + ["cash", "waga"]
+        self._ag_table = ttk.Treeview(left, columns=ag_cols, show="headings", height=5)
+        self._ag_table.heading("agent", text="Agent")
+        self._ag_table.column("agent", width=92, anchor="w", stretch=False)
+        for c in COIN_IDS:
+            lbl = LABELS[c]
+            self._ag_table.heading(lbl, text=lbl)
+            self._ag_table.column(lbl, width=52, anchor="center", stretch=False)
+        self._ag_table.heading("cash", text="Gotówka")
+        self._ag_table.column("cash", width=62, anchor="center", stretch=False)
+        self._ag_table.heading("waga", text="Waga")
+        self._ag_table.column("waga", width=56, anchor="center", stretch=False)
+        self._ag_table.tag_configure("final", background=C_BORDER, foreground=C_TEXT)
+        self._ag_table.pack(fill=tk.X, padx=(16, 8), pady=(0, 16))
+
+        right = tk.Frame(tab, bg=C_PANEL2, width=380)
+        right.pack(side=tk.RIGHT, fill=tk.Y, padx=(1, 0))
+        right.pack_propagate(False)
+
+        ctrl = tk.Frame(right, bg=C_PANEL2)
+        ctrl.pack(fill=tk.X, padx=16, pady=(16, 6))
+        for text, cmd in (("◀", self._ag_prev), ("▶", self._ag_next), ("▶▶", self._ag_play)):
+            tk.Button(ctrl, text=text, command=cmd, width=5,
+                      bg=C_BORDER, fg=C_TEXT, activebackground=C_PANEL,
+                      activeforeground="#ffffff", font=FONT_MONO_B, relief="flat",
+                      bd=0, cursor="hand2", pady=5).pack(side=tk.LEFT, padx=2)
+        tk.Button(ctrl, text="⟳ Ponów", command=self._ag_load, width=8,
+                  bg=C_BORDER, fg=C_TEXT, activebackground=C_PANEL,
+                  activeforeground="#ffffff", font=FONT_MONO_B, relief="flat",
+                  bd=0, cursor="hand2", pady=5).pack(side=tk.LEFT, padx=(12, 2))
+
+        ag_sel = tk.Frame(right, bg=C_PANEL2)
+        ag_sel.pack(fill=tk.X, padx=16, pady=(0, 8))
+        tk.Label(ag_sel, text="AGENCI (włącz / wyłącz)", bg=C_PANEL2, fg=C_TEXT3,
+                 font=("Courier New", 8, "bold"), anchor="w").pack(fill=tk.X)
+        self._ag_vars = {}
+        for name, label in (("pessimist", "Pesymista (więcej gotówki)"),
+                            ("realist", "Realista (neutralny)"),
+                            ("optimist", "Optymista (więcej aktywów)")):
+            var = tk.BooleanVar(value=True)
+            self._ag_vars[name] = var
+            tk.Checkbutton(ag_sel, text=label, variable=var, command=self._ag_on_toggle,
+                           bg=C_PANEL2, fg=C_TEXT, selectcolor=C_BG,
+                           activebackground=C_PANEL2, activeforeground=C_TEXT,
+                           font=FONT_UI, anchor="w", highlightthickness=0, bd=0
+                           ).pack(anchor="w", pady=1)
+
+        self._ag_info = tk.Text(right, bg=C_PANEL, fg=C_TEXT, font=("Courier New", 9),
+                                height=24, relief="flat", bd=4, wrap="word", state="disabled")
+        self._ag_info.pack(fill=tk.BOTH, expand=True, padx=16, pady=(0, 8))
+
+        self._ag_status = tk.Label(right, text="Pobieranie danych rynkowych…",
+                                   bg=C_PANEL2, fg=C_TEXT2, font=FONT_UI_S,
+                                   wraplength=340, justify="left", anchor="w")
+        self._ag_status.pack(fill=tk.X, padx=16, pady=(0, 16))
+
+        self._ag_load()
+
+    def _ag_load(self):
+        if getattr(self, "_ag_loading", False):
+            return
+        self._ag_loading = True
+        self._ag_set_status("Pobieranie danych rynkowych…")
+        threading.Thread(target=self._ag_fetch_thread, daemon=True).start()
+
+    def _ag_fetch_thread(self):
+        last_err = None
+        try:
+            time.sleep(1.5)  # poczekaj, aż zakończy się pobieranie cen portfela
+            for attempt in range(3):
+                try:
+                    frames = fetch_multi_asset_dataset(
+                        COIN_IDS, days=365, cache_dir="data_cache",
+                        progress=self._ag_progress)
+                    self._ag_frames = frames
+                    timeline = build_rebalance_timeline(
+                        frames, self._portfolio, COIN_IDS,
+                        enabled=self._ag_enabled(), models=self._ensure_rl_models())
+                    self.root.after(0, self._ag_on_loaded, timeline)
+                    return
+                except Exception as e:
+                    last_err = e
+                    if attempt < 2:
+                        time.sleep(8)
+            self.root.after(0, self._ag_on_error, str(last_err))
+        finally:
+            self._ag_loading = False
+
+    def _ag_progress(self, done, total, cid):
+        lbl = LABELS.get(cid, cid)
+        self.root.after(0, self._ag_set_status, f"Pobieranie danych {done}/{total}: {lbl}…")
+
+    def _ensure_rl_models(self):
+        lock = getattr(self, "_rl_lock", None)
+        if lock is None:
+            lock = threading.Lock()
+            self._rl_lock = lock
+        with lock:
+            if getattr(self, "_rl_models_loaded", False):
+                return self._rl_models
+            self._rl_models_loaded = True
+            try:
+                from .rl.agents import load_agents
+                self._rl_models = load_agents("models")
+            except Exception:
+                self._rl_models = None
+        return self._rl_models
+
+    def _ag_on_loaded(self, timeline):
+        self._ag_timeline = timeline
+        self._ag_idx = len(timeline) - 1
+        src = "modele RL" if self._rl_models is not None else "wagi deterministyczne"
+        self._ag_set_status(f"✓ Załadowano {len(timeline)} dni ({src}).")
+        self._ag_draw()
+
+    def _ag_on_error(self, msg):
+        self._ag_set_status(f"✗ {msg}  (kliknij ⟳ Ponów)", C_DOWN)
+
+    def _ag_enabled(self):
+        vars = getattr(self, "_ag_vars", None)
+        if not vars:
+            return None
+        return {name: var.get() for name, var in vars.items()}
+
+    def _ag_on_toggle(self):
+        frames = getattr(self, "_ag_frames", None)
+        if frames is None:
+            return
+        self._ag_timeline = build_rebalance_timeline(
+            frames, self._portfolio, COIN_IDS, enabled=self._ag_enabled())
+        self._ag_idx = min(self._ag_idx, len(self._ag_timeline) - 1)
+        self._ag_draw()
+
+    def _ag_draw(self):
+        tl = self._ag_timeline
+        if not tl:
+            return
+        ax = self.ax_agents
+        ax.cla()
+        ax.set_facecolor(C_PANEL)
+        for spine in ax.spines.values():
+            spine.set_edgecolor(C_BORDER)
+        ax.tick_params(colors=C_TEXT2, labelsize=8)
+        ax.grid(True, color=C_GRID, lw=0.4, ls="--", alpha=0.7)
+
+        dates = mdates.date2num([d["date"] for d in tl])
+        n_assets = len(COIN_IDS)
+        series = []
+        labels = []
+        for i in range(n_assets):
+            series.append([d["weights"][i] for d in tl])
+            labels.append(LABELS[COIN_IDS[i]])
+        series.append([d["weights"][-1] for d in tl])
+        labels.append("GOTÓWKA")
+
+        colors = ["#f5a623", "#a78bfa", "#00c896", "#4a90d9", "#e05d5d",
+                  "#5dd0e0", "#e0b05d", "#b05de0", "#6b7280"]
+        ax.stackplot(dates, *series, labels=labels, colors=colors[:len(series)], alpha=0.92)
+        ax.axvline(dates[self._ag_idx], color="#ffffff", lw=1, ls=":", alpha=0.7)
+
+        ax.set_ylim(0, 1)
+        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{v:.0%}"))
+        locator = mdates.AutoDateLocator(minticks=4, maxticks=8)
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+        ax.set_title("Alokacja docelowa w czasie (rebalancing)", color=C_TEXT,
+                     fontsize=10, loc="left", pad=6)
+        ax.legend(fontsize=8, facecolor=C_PANEL2, edgecolor=C_BORDER, labelcolor=C_TEXT,
+                  loc="upper left", ncol=3)
+
+        self.canvas_agents.draw_idle()
+        self._ag_update_table()
+        self._ag_update_info()
+
+    def _ag_update_table(self):
+        tl = self._ag_timeline
+        if not tl:
+            return
+        d = tl[self._ag_idx]
+        aw = d["agent_weights"]
+        bc = d["blend_coeffs"]
+        self._ag_table.delete(*self._ag_table.get_children())
+        for key, label in (("pessimist", "Pesymista"),
+                           ("realist", "Realista"),
+                           ("optimist", "Optymista")):
+            w = aw[key]
+            vals = [label] + [f"{x*100:.0f}%" for x in w[:-1]] + \
+                   [f"{w[-1]*100:.0f}%"] + [f"{bc[key]:.2f}"]
+            self._ag_table.insert("", tk.END, values=vals)
+        final = d["weights"]
+        vals = ["FINALNY"] + [f"{x*100:.0f}%" for x in final[:-1]] + \
+               [f"{final[-1]*100:.0f}%"] + ["—"]
+        self._ag_table.insert("", tk.END, values=vals, tags=("final",))
+
+    def _ag_update_info(self):
+        tl = self._ag_timeline
+        if not tl:
+            return
+        d = tl[self._ag_idx]
+        bc = d["blend_coeffs"]
+        enabled = self._ag_enabled() or {}
+        lines = []
+        lines.append(f"Dzień: {d['date'].strftime('%d.%m.%Y')}")
+        lines.append(f"Zmienność rynku: {d['volatility']:.4f}")
+        lines.append("")
+        lines.append("Współczynniki blendu (udział w finalnej alokacji):")
+        for key, label in (("pessimist", "Pesymista"),
+                           ("realist", "Realista"),
+                           ("optimist", "Optymista")):
+            state = "wł." if enabled.get(key, True) else "wył."
+            lines.append(f"  {label:<11} {bc[key]:.2f}   ({state})")
+        lines.append("")
+        lines.append(f"Wartość portfela: ${d['total_value']:,.2f}")
+        lines.append(f"Przenieś do gotówki (brutto): ${d['cash_target']:,.2f}")
+        lines.append("")
+        lines.append("Transakcje rebalancingu (do alokacji FINALNEJ):")
+        for t in d["trades"]:
+            sign = "+" if t["delta"] >= 0 else ""
+            lines.append(f"  {t['action']:>7} {LABELS[t['coin']]:>4}  {sign}${abs(t['delta']):,.2f}")
+        lines.append("")
+        lines.append("Koszty rebalancingu:")
+        lines.append(f"  Opłaty: ${d['total_fee']:,.2f}    Podatek: ${d['total_tax']:,.2f}")
+        lines.append(f"  Razem:  ${d['total_cost']:,.2f}")
+        self._ag_set_text("\n".join(lines))
+
+    def _ag_prev(self):
+        if self._ag_timeline and self._ag_idx > 0:
+            self._ag_idx -= 1
+            self._ag_draw()
+
+    def _ag_next(self):
+        if self._ag_timeline and self._ag_idx < len(self._ag_timeline) - 1:
+            self._ag_idx += 1
+            self._ag_draw()
+
+    def _ag_play(self):
+        if not self._ag_timeline:
+            return
+        self._ag_playing = not self._ag_playing
+        if self._ag_playing:
+            if self._ag_idx >= len(self._ag_timeline) - 1:
+                self._ag_idx = 0
+            self._ag_step_play()
+
+    def _ag_step_play(self):
+        if not getattr(self, "_ag_playing", False):
+            return
+        if self._ag_idx < len(self._ag_timeline) - 1:
+            self._ag_idx += 1
+            self._ag_draw()
+            self.root.after(150, self._ag_step_play)
+        else:
+            self._ag_playing = False
+
+    def _ag_set_status(self, msg, color=C_TEXT2):
+        self._ag_status.config(text=msg, fg=color)
+
+    def _ag_set_text(self, s):
+        self._ag_info.config(state="normal")
+        self._ag_info.delete("1.0", tk.END)
+        self._ag_info.insert("1.0", s)
+        self._ag_info.config(state="disabled")
 
     def _build_statusbar(self):
         bar = tk.Frame(self.root, bg="#0a0a0a", height=40)
@@ -805,6 +1276,7 @@ def show_charts(df: pd.DataFrame, coin_label: str, range_label: str) -> None:
 
     app._mode     = "buy"
     app._loading  = False
+    app._portfolio = Portfolio()
     app._last_sub = None
     app._last_t0  = None
     app._last_t1  = None
@@ -816,6 +1288,8 @@ def show_charts(df: pd.DataFrame, coin_label: str, range_label: str) -> None:
     app._build_sidebar()
     app._build_charts_area()
     app._build_opt_tab()
+    app._build_portfolio_tab()
+    app._build_agents_tab()
     app._build_statusbar()
 
     s = compute_stats(app._df)
